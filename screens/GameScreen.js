@@ -22,7 +22,7 @@ const normalize = (s) =>
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
 
-const GameScreen = ({ navigation, route }) => {
+const GameScreen = () => {
   const items = useMemo(() => {
     const list = wordsData?.items ?? [];
     return Array.isArray(list) ? list : [];
@@ -39,21 +39,20 @@ const GameScreen = ({ navigation, route }) => {
     return items[idx];
   }, [items]);
 
-  useEffect(() => {
-    setCurrent(pickRandomItem());
-    setGuess("");
-    setFeedback("");
-    setGuesses([]);
-  }, [pickRandomItem]);
-
-  useEffect(() => {
-    if (route?.params?.nextItem) {
-      setCurrent(route.params.nextItem);
+  const resetRound = useCallback(
+    (item) => {
+      setCurrent(item ?? pickRandomItem());
       setGuess("");
       setFeedback("");
       setGuesses([]);
-    }
-  }, [route?.params?.nextItem]);
+      Keyboard.dismiss();
+    },
+    [pickRandomItem]
+  );
+
+  useEffect(() => {
+    resetRound(pickRandomItem());
+  }, [resetRound, pickRandomItem]);
 
   const getFeedback = (guessValue) => {
     if (!current?.word) return "Nenhuma palavra disponível no arquivo JSON.";
@@ -101,8 +100,7 @@ const GameScreen = ({ navigation, route }) => {
   };
 
   const handleNextWord = () => {
-    const nextItem = pickRandomItem();
-    navigation.navigate("Result", { nextItem });
+    resetRound(); // sorteia outra e reseta tudo na mesma tela
   };
 
   const feedbackMeta = (() => {
@@ -121,12 +119,6 @@ const GameScreen = ({ navigation, route }) => {
       style={styles.screen}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      {/* IMPORTANTE:
-          Removemos TouchableWithoutFeedback aqui porque ele costuma “roubar”
-          o gesto de scroll no Android.
-          O teclado vai fechar ao arrastar a lista (keyboardDismissMode="on-drag")
-          e também quando você clicar em Verificar (Keyboard.dismiss()).
-      */}
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.kicker}>Context</Text>
@@ -202,7 +194,6 @@ const GameScreen = ({ navigation, route }) => {
           </Pressable>
         </View>
 
-        {/* Lista embaixo ocupando o espaço restante (scroll MUITO melhor) */}
         <View style={styles.triedSection}>
           <View style={styles.triedHeader}>
             <Text style={styles.triedLabel}>Palavras já tentadas</Text>
@@ -218,7 +209,6 @@ const GameScreen = ({ navigation, route }) => {
                   <Text style={styles.triedRowText}>{item.raw}</Text>
                 </View>
               )}
-              // Android-friendly
               nestedScrollEnabled={true}
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="on-drag"
@@ -352,7 +342,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(148,163,184,0.22)",
   },
 
-  // Lista ocupa o espaço restante => scroll bem melhor
   triedSection: {
     flex: 1,
     marginTop: 14,
