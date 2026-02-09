@@ -1,5 +1,5 @@
 // GameScreen.js
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  FlatList,
+  Animated,
+  Easing,
+  ScrollView,
 } from "react-native";
 
 import wordsData from "../assets/words.json";
@@ -22,16 +24,90 @@ const normalize = (s) =>
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
 
+const WORD_LENGTH = 5;
+const MAX_TRIES = 6;
+
+// ✅ animação mais lenta
+const FLIP_DURATION = 650;
+const FLIP_STAGGER = 130;
+
+function buildEvaluation(guessRaw, answerRaw) {
+  const guess = normalize(guessRaw);
+  const answer = normalize(answerRaw);
+
+  const g = guess.split("");
+  const a = answer.split("");
+
+  const result = Array(WORD_LENGTH).fill("absent");
+
+  // 1) corretas + pool restante
+  const remaining = new Map();
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    if (g[i] === a[i]) {
+      result[i] = "correct";
+    } else {
+      remaining.set(a[i], (remaining.get(a[i]) ?? 0) + 1);
+    }
+  }
+
+  // 2) presentes (amarelo) respeitando repetidas
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    if (result[i] === "correct") continue;
+    const ch = g[i];
+    const count = remaining.get(ch) ?? 0;
+    if (count > 0) {
+      result[i] = "present";
+      remaining.set(ch, count - 1);
+    }
+  }
+
+  return result;
+}
+
+function buildLetterHint(guessRaw, answerRaw, evaluation) {
+  const answer = normalize(answerRaw);
+  const guess = normalize(guessRaw);
+
+  const lastIdx = Math.max(0, Math.min(WORD_LENGTH - 1, guess.length - 1));
+  const letter = (guess[lastIdx] || "").toUpperCase();
+  if (!letter) return "";
+
+  const status = evaluation[lastIdx];
+  if (status === "correct") {
+    return `A letra ${letter} faz parte da palavra e está na posição correta.`;
+  }
+  if (status === "present") {
+    return `A letra ${letter} faz parte da palavra mas em outra posição.`;
+  }
+  const exists = answer.includes(normalize(letter));
+  if (exists) {
+    return `A letra ${letter} faz parte da palavra mas em outra posição.`;
+  }
+  return `A letra ${letter} não faz parte da palavra.`;
+}
+
 const GameScreen = () => {
   const items = useMemo(() => {
     const list = wordsData?.items ?? [];
     return Array.isArray(list) ? list : [];
   }, []);
 
-  const [guess, setGuess] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const inputRef = useRef(null);
+
   const [current, setCurrent] = useState(null);
-  const [guesses, setGuesses] = useState([]); // { raw, norm }
+  const [currentGuess, setCurrentGuess] = useState("");
+  const [attempts, setAttempts] = useState([]); // [{ guessRaw, evaluation }]
+  const [message, setMessage] = useState("");
+  const [done, setDone] = useState(false);
+
+  // ===== animação de flip (giro) por célula =====
+  // usamos 6x5 Animated.Value (um para cada quadrado do tabuleiro)
+  const flipsRef = useRef(
+    Array.from({ length: MAX_TRIES }, () =>
+      Array.from({ length: WORD_LENGTH }, () => new Animated.Value(0))
+    )
+  );
+  const isAnimatingRef = useRef(false);
 
   const pickRandomItem = useCallback(() => {
     if (!items.length) return null;
@@ -39,93 +115,212 @@ const GameScreen = () => {
     return items[idx];
   }, [items]);
 
-  const resetRound = useCallback(
-    (item) => {
-      setCurrent(item ?? pickRandomItem());
-      setGuess("");
-      setFeedback("");
-      setGuesses([]);
-      Keyboard.dismiss();
-    },
-    [pickRandomItem]
-  );
+  const resetAnimations = useCallback(() => {
+    for (let r = 0; r < MAX_TRIES; r++) {
+      for (let c = 0; c < WORD_LENGTH; c++) {
+        flipsRef.current[r][c].setValue(0);
+      }
+    }
+    isAnimatingRef.current = false;
+  }, []);
+
+  const resetRound = useCallback(() => {
+    const next = pickRandomItem();
+    setCurrent(next);
+    setAttempts([]);
+    setCurrentGuess("");
+    setMessage("");
+    setDone(false);
+    resetAnimations();
+    Keyboard.dismiss();
+  }, [pickRandomItem, resetAnimations]);
 
   useEffect(() => {
-    resetRound(pickRandomItem());
-  }, [resetRound, pickRandomItem]);
+    resetRound();
+  }, [resetRound]);
 
-  const getFeedback = (guessValue) => {
-    if (!current?.word) return "Nenhuma palavra disponível no arquivo JSON.";
+  const answerWord = current?.word ?? "";
 
-    const g = normalize(guessValue);
-    const w = normalize(current.word);
+  const canSubmit =
+    !done &&
+    normalize(currentGuess).length === WORD_LENGTH &&
+    attempts.length < MAX_TRIES &&
+    !isAnimatingRef.current;
 
-    if (g.length === 0) return "Digite uma tentativa.";
-    if (g === w) return "Parabéns, você acertou!";
+  const runFlipForRow = (rowIndex) => {
+    isAnimatingRef.current = true;
 
-    const tags = Array.isArray(current.tags) ? current.tags : [];
-    const hit = tags.some((t) => {
-      const tag = normalize(t);
-      return tag && (g.includes(tag) || tag.includes(g));
+    const anims = flipsRef.current[rowIndex].map((v) =>
+      Animated.timing(v, {
+        toValue: 1,
+        duration: FLIP_DURATION,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      })
+    );
+
+    return new Promise((resolve) => {
+      Animated.stagger(FLIP_STAGGER, anims).start(() => {
+        flipsRef.current[rowIndex].forEach((v) => v.setValue(0));
+        isAnimatingRef.current = false;
+        resolve();
+      });
     });
-
-    if (hit) return "Você está perto! Use a dica e tente outra palavra relacionada.";
-    return "Ainda não. Use a dica e tente algo relacionado.";
   };
 
-  const handleSubmit = () => {
-    const raw = (guess ?? "").trim();
+  const handleSubmit = async () => {
+    if (!answerWord) {
+      setMessage("Nenhuma palavra disponível no arquivo JSON.");
+      return;
+    }
+
+    const raw = currentGuess.trim();
     const norm = normalize(raw);
 
-    if (!current?.word) {
-      setFeedback("Nenhuma palavra disponível no arquivo JSON.");
+    if (norm.length !== WORD_LENGTH) {
+      setMessage(`Digite uma palavra com ${WORD_LENGTH} letras.`);
       return;
     }
 
-    if (!norm) {
-      setFeedback("Digite uma tentativa.");
-      return;
-    }
-
-    const alreadyTried = guesses.some((g) => g.norm === norm);
-    if (alreadyTried) {
-      setFeedback(`Você já tentou “${raw}”. Tente uma palavra diferente.`);
+    const already = attempts.some((a) => normalize(a.guessRaw) === norm);
+    if (already) {
+      setMessage(`Você já tentou “${raw}”. Tente uma palavra diferente.`);
       Keyboard.dismiss();
       return;
     }
 
-    setGuesses((prev) => [{ raw, norm }, ...prev]);
-    setFeedback(getFeedback(raw));
+    const rowIndex = attempts.length;
+
+    // roda a animação de flip ANTES de registrar o resultado visual
     Keyboard.dismiss();
+    await runFlipForRow(rowIndex);
+
+    const evaluation = buildEvaluation(raw, answerWord);
+    const newAttempts = [...attempts, { guessRaw: raw, evaluation }];
+    setAttempts(newAttempts);
+
+    const isWin = norm === normalize(answerWord);
+
+    if (isWin) {
+      setDone(true);
+      setMessage("Parabéns, você acertou!");
+      setTimeout(() => {
+        resetRound();
+      }, 900);
+      return;
+    }
+
+    const hint = buildLetterHint(raw, answerWord, evaluation);
+    setMessage(hint);
+
+    // acabou as tentativas? reinicia automaticamente
+    if (newAttempts.length >= MAX_TRIES) {
+      setDone(true);
+      setMessage(`Fim de jogo! A palavra era ${answerWord.toUpperCase()}.`);
+      setTimeout(() => {
+        resetRound();
+      }, 1100);
+      return;
+    }
+
+    setCurrentGuess("");
   };
 
-  const handleNextWord = () => {
-    resetRound(); 
+  const handleKeyInput = (text) => {
+    const onlyLetters = (text || "").replace(/[^a-zA-ZÀ-ÿ]/g, "");
+    setCurrentGuess(onlyLetters.slice(0, WORD_LENGTH));
   };
 
-  const feedbackMeta = (() => {
-    if (!feedback) return null;
-    if (feedback === "Parabéns, você acertou!") return { tone: "success", icon: "✅" };
-    if (feedback.includes("perto")) return { tone: "warning", icon: "⚠️" };
-    if (feedback.includes("já tentou")) return { tone: "neutral", icon: "ℹ️" };
-    if (feedback.includes("Digite")) return { tone: "neutral", icon: "ℹ️" };
-    return { tone: "danger", icon: "❌" };
-  })();
+  // ✅ key única por célula (resolve warning)
+  const renderCell = (row, col, char, status, isActive, isCurrentRow) => {
+    const flipVal = flipsRef.current[row][col];
+    const rotateX = flipVal.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0deg", "180deg"],
+    });
 
-  const canGoNext = feedback === "Parabéns, você acertou!";
+    const animatedStyle = isCurrentRow
+      ? { transform: [{ perspective: 800 }, { rotateX }] }
+      : null;
+
+    return (
+      <Animated.View
+        key={`cell-${row}-${col}`}
+        style={[
+          styles.cell,
+          status === "correct" && styles.cellCorrect,
+          status === "present" && styles.cellPresent,
+          status === "absent" && styles.cellAbsent,
+          isActive && styles.cellActive,
+          animatedStyle,
+        ]}
+      >
+        <Text style={styles.cellText}>{(char || "").toUpperCase()}</Text>
+      </Animated.View>
+    );
+  };
+
+  const renderBoard = () => {
+    const rows = [];
+
+    for (let r = 0; r < MAX_TRIES; r++) {
+      const attempt = attempts[r];
+
+      if (attempt) {
+        const g = (attempt.guessRaw || "").split("");
+        rows.push(
+          <View key={`row-${r}`} style={styles.row}>
+            {Array.from({ length: WORD_LENGTH }).map((_, c) =>
+              renderCell(r, c, g[c] || "", attempt.evaluation[c], false, false)
+            )}
+          </View>
+        );
+        continue;
+      }
+
+      if (r === attempts.length && !done) {
+        const chars = currentGuess.split("");
+        rows.push(
+          <View key={`row-${r}`} style={styles.row}>
+            {Array.from({ length: WORD_LENGTH }).map((_, c) => {
+              const isActive = c === chars.length && chars.length < WORD_LENGTH;
+              return renderCell(r, c, chars[c] || "", null, isActive, true);
+            })}
+          </View>
+        );
+        continue;
+      }
+
+      rows.push(
+        <View key={`row-${r}`} style={styles.row}>
+          {Array.from({ length: WORD_LENGTH }).map((_, c) =>
+            renderCell(r, c, "", null, false, false)
+          )}
+        </View>
+      );
+    }
+
+    return rows;
+  };
 
   return (
     <KeyboardAvoidingView
       style={styles.screen}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <View style={styles.container}>
+      {/* ✅ Scroll na página inteira */}
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.header}>
           <Text style={styles.kicker}>Context</Text>
           <Text style={styles.title}>Adivinhe a Palavra</Text>
           <Text style={styles.subtitle}>
-            Digite uma palavra relacionada à dica abaixo. As tentativas ficam registradas
-            para você não repetir.
+            Digite uma palavra de 5 letras. Verde = posição correta, amarelo = existe em
+            outra posição, cinza = não existe.
           </Text>
         </View>
 
@@ -139,105 +334,64 @@ const GameScreen = () => {
             </View>
           </View>
 
-          <Text style={styles.inputLabel}>Sua tentativa</Text>
+          <Pressable onPress={() => inputRef.current?.focus()} style={styles.board}>
+            {renderBoard()}
+          </Pressable>
+
+         
           <TextInput
-            style={styles.input}
-            value={guess}
-            onChangeText={setGuess}
-            placeholder="Ex.: animal, cor, objeto..."
-            placeholderTextColor="#9CA3AF"
-            autoCapitalize="none"
+            ref={inputRef}
+            value={currentGuess}
+            onChangeText={handleKeyInput}
+            autoCapitalize="characters"
             autoCorrect={false}
             returnKeyType="done"
             onSubmitEditing={handleSubmit}
+            style={styles.hiddenInput}
           />
 
           <Pressable
             onPress={handleSubmit}
+            disabled={!canSubmit}
             style={({ pressed }) => [
               styles.primaryBtn,
-              pressed && { transform: [{ scale: 0.99 }], opacity: 0.95 },
+              !canSubmit && { opacity: 0.5 },
+              pressed && canSubmit && { transform: [{ scale: 0.99 }], opacity: 0.95 },
             ]}
           >
             <Text style={styles.primaryBtnText}>Verificar</Text>
           </Pressable>
 
-          {feedback ? (
-            <View
-              style={[
-                styles.feedbackBox,
-                feedbackMeta?.tone === "success" && styles.fbSuccess,
-                feedbackMeta?.tone === "warning" && styles.fbWarning,
-                feedbackMeta?.tone === "danger" && styles.fbDanger,
-                feedbackMeta?.tone === "neutral" && styles.fbNeutral,
-              ]}
-            >
-              <Text style={styles.feedbackIcon}>{feedbackMeta?.icon}</Text>
-              <Text style={styles.feedbackText}>{feedback}</Text>
-            </View>
-          ) : (
-            <Text style={styles.helper}>Dica: pressione “Enter” para verificar.</Text>
-          )}
+          {!!message && <Text style={styles.message}>{message}</Text>}
+
+          <Text style={styles.note}>
+            Os acentos são preenchidos automaticamente, e não são considerados nas dicas.
+          </Text>
 
           <Pressable
-            onPress={handleNextWord}
-            disabled={!canGoNext}
-            style={({ pressed }) => [
-              styles.secondaryBtn,
-              !canGoNext && styles.secondaryBtnDisabled,
-              pressed && canGoNext && { opacity: 0.9 },
-            ]}
+            onPress={resetRound}
+            style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.9 }]}
           >
-            <Text style={[styles.secondaryBtnText, !canGoNext && { opacity: 0.6 }]}>
-              Próxima palavra
-            </Text>
+            <Text style={styles.secondaryBtnText}>Reiniciar agora</Text>
           </Pressable>
-        </View>
-
-        <View style={styles.triedSection}>
-          <View style={styles.triedHeader}>
-            <Text style={styles.triedLabel}>Palavras já tentadas</Text>
-            <Text style={styles.triedCount}>{guesses.length}</Text>
-          </View>
-
-          <View style={styles.triedBox}>
-            <FlatList
-              data={guesses}
-              keyExtractor={(item, index) => `${item.norm}-${index}`}
-              renderItem={({ item }) => (
-                <View style={styles.triedRow}>
-                  <Text style={styles.triedRowText}>{item.raw}</Text>
-                </View>
-              )}
-              nestedScrollEnabled={true}
-              keyboardShouldPersistTaps="handled"
-              keyboardDismissMode="on-drag"
-              removeClippedSubviews={true}
-              showsVerticalScrollIndicator={true}
-              scrollEventThrottle={16}
-              contentContainerStyle={styles.triedBoxContent}
-              ListEmptyComponent={
-                <Text style={styles.triedEmpty}>Nenhuma tentativa ainda.</Text>
-              }
-            />
-          </View>
         </View>
 
         <Text style={styles.footer}>
           {items.length ? `${items.length} palavras no banco` : "Sem palavras no banco"}
         </Text>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#0B1220" },
+
   container: {
-    flex: 1,
     paddingHorizontal: 20,
     paddingTop: 70,
-    paddingBottom: 18,
+    paddingBottom: 24,
+    flexGrow: 1,
   },
 
   header: { marginBottom: 18 },
@@ -277,17 +431,50 @@ const styles = StyleSheet.create({
   },
   hintText: { color: "#E5E7EB", fontSize: 14, fontWeight: "600" },
 
-  inputLabel: { color: "#9CA3AF", fontSize: 12, marginBottom: 8 },
-  input: {
-    backgroundColor: "#0B1220",
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    color: "#F9FAFB",
+  board: { marginTop: 6, marginBottom: 14 },
+  row: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 10,
+  },
+  cell: {
+    flex: 1,
+    height: 54,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.04)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    marginBottom: 12,
-    fontSize: 16,
+    borderColor: "rgba(255,255,255,0.14)",
+    backfaceVisibility: "hidden",
+  },
+  cellActive: {
+    borderColor: "rgba(147, 197, 253, 0.70)",
+  },
+  cellCorrect: {
+    backgroundColor: "rgba(16, 185, 129, 0.35)",
+    borderColor: "rgba(16, 185, 129, 0.55)",
+  },
+  cellPresent: {
+    backgroundColor: "rgba(245, 158, 11, 0.35)",
+    borderColor: "rgba(245, 158, 11, 0.55)",
+  },
+  cellAbsent: {
+    backgroundColor: "rgba(148, 163, 184, 0.14)",
+    borderColor: "rgba(148, 163, 184, 0.22)",
+  },
+  cellText: {
+    color: "#F9FAFB",
+    fontSize: 20,
+    fontWeight: "800",
+    letterSpacing: 1,
+  },
+
+  hiddenInput: {
+    position: "absolute",
+    opacity: 0,
+    height: 1,
+    width: 1,
   },
 
   primaryBtn: {
@@ -295,9 +482,25 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 10,
   },
   primaryBtnText: { color: "#FFFFFF", fontSize: 16, fontWeight: "700" },
+
+  message: {
+    color: "#E5E7EB",
+    fontSize: 16,
+    lineHeight: 22,
+    marginTop: 6,
+    marginBottom: 6,
+  },
+
+  note: {
+    color: "rgba(203,213,225,0.7)",
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 4,
+    marginBottom: 12,
+  },
 
   secondaryBtn: {
     backgroundColor: "rgba(255,255,255,0.06)",
@@ -307,88 +510,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
   },
-  secondaryBtnDisabled: { opacity: 0.45 },
   secondaryBtnText: { color: "#E5E7EB", fontSize: 15, fontWeight: "700" },
-
-  helper: { color: "#94A3B8", fontSize: 12, marginTop: 6, lineHeight: 18 },
-
-  feedbackBox: {
-    marginTop: 2,
-    marginBottom: 12,
-    borderRadius: 14,
-    padding: 12,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 10,
-    borderWidth: 1,
-  },
-  feedbackIcon: { fontSize: 16, marginTop: 1 },
-  feedbackText: { flex: 1, color: "#E5E7EB", fontSize: 14, lineHeight: 20 },
-
-  fbSuccess: {
-    backgroundColor: "rgba(34,197,94,0.10)",
-    borderColor: "rgba(34,197,94,0.25)",
-  },
-  fbWarning: {
-    backgroundColor: "rgba(245,158,11,0.10)",
-    borderColor: "rgba(245,158,11,0.25)",
-  },
-  fbDanger: {
-    backgroundColor: "rgba(239,68,68,0.10)",
-    borderColor: "rgba(239,68,68,0.25)",
-  },
-  fbNeutral: {
-    backgroundColor: "rgba(148,163,184,0.10)",
-    borderColor: "rgba(148,163,184,0.22)",
-  },
-
-  triedSection: {
-    flex: 1,
-    marginTop: 14,
-  },
-  triedHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  triedLabel: { color: "#9CA3AF", fontSize: 12 },
-  triedCount: {
-    color: "#E5E7EB",
-    fontSize: 12,
-    fontWeight: "800",
-    backgroundColor: "rgba(255,255,255,0.08)",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
-  },
-  triedBox: {
-    flex: 1,
-    borderRadius: 12,
-    backgroundColor: "rgba(255,255,255,0.04)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    padding: 10,
-    overflow: "hidden",
-  },
-  triedBoxContent: {
-    paddingBottom: 12,
-  },
-  triedRow: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 10,
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    marginBottom: 8,
-  },
-  triedRowText: {
-    color: "#E5E7EB",
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  triedEmpty: { color: "#94A3B8", fontSize: 12 },
 
   footer: {
     color: "rgba(203,213,225,0.7)",

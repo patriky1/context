@@ -1,136 +1,2186 @@
 {
   "items": [
-    { "word": "árvore", "hint": "Planta grande com tronco e copa.", "tags": ["folha","galho","tronco","madeira","verde","sombra","bosque","floresta"] },
-    { "word": "floresta", "hint": "Lugar com muitas árvores.", "tags": ["mata","selva","árvore","verde","natureza","biodiversidade","bosque"] },
-    { "word": "rio", "hint": "Curso de água que corre.", "tags": ["água","correnteza","margem","ponte","nascente","cachoeira"] },
-    { "word": "lago", "hint": "Corpo de água parado e cercado por terra.", "tags": ["água","represa","margem","peixe","barco"] },
-    { "word": "mar", "hint": "Grande massa de água salgada.", "tags": ["oceano","praia","onda","sal","areia","navio"] },
-    { "word": "oceano", "hint": "Ainda maior que o mar; cobre grande parte do planeta.", "tags": ["mar","onda","sal","corrente","profundo"] },
-    { "word": "praia", "hint": "Faixa de areia ao lado do mar.", "tags": ["areia","onda","mar","sol","concha","verão"] },
-    { "word": "areia", "hint": "Grãos finos encontrados na praia e no deserto.", "tags": ["praia","deserto","grão","duna"] },
-    { "word": "duna", "hint": "Montinho de areia moldado pelo vento.", "tags": ["areia","deserto","vento","praia"] },
-    { "word": "montanha", "hint": "Elevação grande do relevo.", "tags": ["serra","pico","neve","trilha","altura"] },
-    { "word": "serra", "hint": "Conjunto de montanhas.", "tags": ["montanha","pico","cordilheira","trilha"] },
-    { "word": "cachoeira", "hint": "Queda d'água em um rio.", "tags": ["rio","água","queda","pedra","trilha"] },
-    { "word": "nascente", "hint": "Local onde um rio começa.", "tags": ["rio","água","fonte","mina"] },
-    { "word": "chuva", "hint": "Água que cai das nuvens.", "tags": ["nuvem","tempestade","gotas","clima","guarda-chuva"] },
-    { "word": "nuvem", "hint": "Formação no céu que pode trazer chuva.", "tags": ["céu","chuva","vento","tempestade"] },
-    { "word": "vento", "hint": "Ar em movimento.", "tags": ["brisa","tempestade","ar","duna","bandeira"] },
-    { "word": "tempestade", "hint": "Clima intenso com vento e, às vezes, trovão.", "tags": ["chuva","vento","raio","trovão","nuvem"] },
-    { "word": "raio", "hint": "Descarga elétrica no céu durante tempestade.", "tags": ["trovão","tempestade","eletricidade","relâmpago"] },
-    { "word": "trovão", "hint": "Som forte após um raio.", "tags": ["raio","tempestade","nuvem"] },
-    { "word": "sol", "hint": "Estrela que ilumina e aquece a Terra.", "tags": ["luz","calor","dia","verão"] },
-    { "word": "lua", "hint": "Satélite natural visível à noite.", "tags": ["noite","céu","estrela","maré"] },
-    { "word": "estrela", "hint": "Ponto brilhante no céu noturno.", "tags": ["céu","constelação","noite","galáxia"] },
-    { "word": "galáxia", "hint": "Conjunto enorme de estrelas.", "tags": ["estrela","universo","via-láctea","cosmo"] },
-    { "word": "universo", "hint": "Tudo que existe: espaço, estrelas e mais.", "tags": ["galáxia","cosmo","espaço","planeta"] },
-    { "word": "planeta", "hint": "Corpo celeste que orbita uma estrela.", "tags": ["terra","marte","órbita","espaço"] },
-
-    { "word": "flor", "hint": "Parte colorida de muitas plantas.", "tags": ["pétala","jardim","perfume","abelha"] },
-    { "word": "folha", "hint": "Parte verde que ajuda a planta a produzir energia.", "tags": ["árvore","verde","clorofila","galho"] },
-    { "word": "raiz", "hint": "Parte da planta que fica no solo.", "tags": ["terra","planta","nutriente","água"] },
-    { "word": "semente", "hint": "Começo de uma nova planta.", "tags": ["planta","germinar","terra","fruto"] },
-    { "word": "fruto", "hint": "Parte que pode conter sementes.", "tags": ["semente","árvore","comida","doce"] },
-    { "word": "grama", "hint": "Vegetação baixa comum em jardins.", "tags": ["verde","jardim","campo","relva"] },
-    { "word": "jardim", "hint": "Lugar com plantas cuidadas.", "tags": ["flor","grama","planta","horta"] },
-    { "word": "horta", "hint": "Local de cultivo de alimentos.", "tags": ["alface","tomate","terra","plantar"] },
-
-    { "word": "abelha", "hint": "Inseto que produz mel e ajuda na polinização.", "tags": ["mel","colmeia","flor","polinizar"] },
-    { "word": "borboleta", "hint": "Inseto colorido que voa e passa por metamorfose.", "tags": ["asas","lagarta","flor","voar"] },
-    { "word": "formiga", "hint": "Inseto que vive em colônias e carrega folhas.", "tags": ["inseto","colônia","trilha","folha"] },
-    { "word": "joaninha", "hint": "Inseto pequeno com pintinhas.", "tags": ["inseto","vermelho","folha","jardim"] },
-
-    { "word": "cão", "hint": "Animal doméstico que late.", "tags": ["cachorro","pet","latir","coleira"] },
-    { "word": "gato", "hint": "Animal doméstico que mia.", "tags": ["miau","pet","felino","bigode"] },
-
-    { "word": "leão", "hint": "Grande felino conhecido como rei da selva.", "tags": ["felino","juba","savana","predador"] },
-    { "word": "tigre", "hint": "Felino grande com listras.", "tags": ["felino","listra","selva","predador"] },
-    { "word": "elefante", "hint": "Grande mamífero com tromba.", "tags": ["tromba","presas","savana","gigante"] },
-    { "word": "girafa", "hint": "Animal alto com pescoço longo.", "tags": ["pescoço","savana","mancha","folha"] },
-    { "word": "zebra", "hint": "Animal com listras preto e branco.", "tags": ["listra","savana","cavalo"] },
-    { "word": "urso", "hint": "Animal grande que pode viver em florestas e montanhas.", "tags": ["mel","hibernar","floresta","frio"] },
-    { "word": "pinguim", "hint": "Ave que vive em locais frios e não voa.", "tags": ["gelo","antártica","frio","peixe"] },
-    { "word": "tartaruga", "hint": "Animal com casco.", "tags": ["casco","lento","mar","praia"] },
-    { "word": "golfinho", "hint": "Mamífero marinho inteligente.", "tags": ["mar","oceano","nadar","saltos"] },
-    { "word": "baleia", "hint": "Um dos maiores animais do planeta, vive no oceano.", "tags": ["oceano","mar","gigante","canto"] },
-    { "word": "tubarão", "hint": "Peixe predador do mar com muitos dentes.", "tags": ["mar","oceano","predador","barbatana"] },
-
-    { "word": "arco-íris", "hint": "Aparece no céu após a chuva com várias cores.", "tags": ["chuva","sol","cores","céu"] },
-    { "word": "neve", "hint": "Água congelada que cai em flocos.", "tags": ["frio","inverno","gelo","montanha"] },
-    { "word": "gelo", "hint": "Água congelada.", "tags": ["frio","neve","inverno","congelado"] },
-    { "word": "inverno", "hint": "Estação do ano mais fria.", "tags": ["frio","neve","casaco","gelo"] },
-    { "word": "verão", "hint": "Estação do ano mais quente.", "tags": ["sol","praia","calor","férias"] },
-
-    { "word": "fogo", "hint": "Combustão que gera calor e luz.", "tags": ["chama","calor","fumaça","lenha"] },
-    { "word": "fumaça", "hint": "Vapor/partículas que sobem do fogo.", "tags": ["fogo","queimar","cinza"] },
-    { "word": "cinza", "hint": "Resíduo do que foi queimado.", "tags": ["fogo","queimar","carvão"] },
-
-    { "word": "pedra", "hint": "Material sólido encontrado no chão e montanhas.", "tags": ["rocha","montanha","rio","caverna"] },
-    { "word": "caverna", "hint": "Buraco grande em rochas ou montanhas.", "tags": ["pedra","rocha","escuro","morcego"] },
-    { "word": "vulcão", "hint": "Montanha que pode expelir lava.", "tags": ["lava","erupção","montanha","cinza"] },
-    { "word": "lava", "hint": "Rocha derretida que sai do vulcão.", "tags": ["vulcão","calor","erupção"] },
-
-    { "word": "deserto", "hint": "Região muito seca e com pouca vegetação.", "tags": ["areia","duna","calor","seco"] },
-
-    { "word": "campo", "hint": "Área aberta com vegetação baixa.", "tags": ["grama","fazenda","verde","pastagem"] },
-    { "word": "fazenda", "hint": "Local de produção rural.", "tags": ["campo","animais","plantação","colheita"] },
-    { "word": "plantação", "hint": "Área onde se cultivam plantas.", "tags": ["campo","horta","colheita","terra"] },
-    { "word": "colheita", "hint": "Ato de recolher o que foi plantado.", "tags": ["plantação","fazenda","fruto","alimento"] },
-
-    { "word": "reciclagem", "hint": "Processo de reaproveitar materiais.", "tags": ["lixo","reutilizar","reduzir","coleta seletiva","sustentável"] },
-    { "word": "reutilizar", "hint": "Usar novamente algo que iria para o lixo.", "tags": ["reciclagem","reduzir","reaproveitar","sustentável"] },
-    { "word": "reduzir", "hint": "Diminuir o consumo e a geração de lixo.", "tags": ["reciclagem","consumo","sustentável","3r"] },
-    { "word": "compostagem", "hint": "Transformar restos orgânicos em adubo.", "tags": ["adubo","terra","orgânico","horta"] },
-    { "word": "adubo", "hint": "Substância que ajuda plantas a crescer.", "tags": ["terra","composto","horta","nutriente"] },
-    { "word": "sustentabilidade", "hint": "Cuidar do planeta usando recursos com responsabilidade.", "tags": ["meio ambiente","reciclagem","energia","consciência"] },
-
-    { "word": "energia", "hint": "Capacidade de realizar trabalho; pode vir do sol, vento etc.", "tags": ["eletricidade","solar","eólica","potência"] },
-    { "word": "solar", "hint": "Relacionado ao sol; pode gerar energia.", "tags": ["sol","energia","painel","luz"] },
-    { "word": "eólica", "hint": "Energia gerada pelo vento.", "tags": ["vento","energia","turbina","hélice"] },
-
-    { "word": "lobo", "hint": "Animal parecido com cachorro que vive em matas.", "tags": ["matilha","uivo","floresta"] },
-    { "word": "raposa", "hint": "Animal esperto com cauda grande.", "tags": ["cauda","floresta","noturno"] },
-    { "word": "veado", "hint": "Animal de chifres encontrado em florestas.", "tags": ["chifre","mata","herbívoro"] },
-    { "word": "onça", "hint": "Grande felino que vive em florestas.", "tags": ["felino","pintada","selva","predador"] },
-    { "word": "tamanduá", "hint": "Animal que come formigas.", "tags": ["formiga","cupim","focinho"] },
-    { "word": "capivara", "hint": "Maior roedor do mundo, vive perto de água.", "tags": ["rio","lago","roedor","água"] },
-    { "word": "sabiá", "hint": "Pássaro conhecido pelo canto.", "tags": ["pássaro","canto","ninho","árvore"] },
-    { "word": "beija-flor", "hint": "Pássaro pequeno que paira no ar.", "tags": ["flor","néctar","asas","voar"] },
-
-    { "word": "coral", "hint": "Estrutura viva no mar, forma recifes.", "tags": ["oceano","mar","recife","peixe"] },
-    { "word": "recife", "hint": "Formação no mar, muitas vezes feita por corais.", "tags": ["coral","mar","peixe","oceano"] },
-
-    { "word": "mangue", "hint": "Ecossistema costeiro com raízes na água.", "tags": ["lama","maré","caranguejo","costa"] },
-    { "word": "caranguejo", "hint": "Animal de pinças comum no mangue.", "tags": ["mangue","pinça","mar","lama"] },
-
-    { "word": "bambu", "hint": "Planta alta e oca, cresce rápido.", "tags": ["planta","verde","cana","floresta"] },
-    { "word": "cacto", "hint": "Planta do deserto que guarda água.", "tags": ["deserto","espinho","seco","areia"] },
-
-    { "word": "orquídea", "hint": "Flor conhecida pela beleza e variedade.", "tags": ["flor","jardim","pétala"] },
-    { "word": "girassol", "hint": "Flor que acompanha a luz do sol.", "tags": ["flor","sol","amarelo","semente"] },
-
-    { "word": "morcego", "hint": "Animal noturno que usa ecolocalização.", "tags": ["noite","caverna","voar"] },
-    { "word": "coruja", "hint": "Ave noturna de olhos grandes.", "tags": ["noite","voar","silêncio"] },
-
-    { "word": "ar", "hint": "Mistura de gases que respiramos.", "tags": ["vento","respirar","atmosfera"] },
-    { "word": "atmosfera", "hint": "Camada de gases ao redor da Terra.", "tags": ["ar","céu","clima"] },
-
-    { "word": "clima", "hint": "Conjunto de condições do tempo ao longo do tempo.", "tags": ["chuva","sol","vento","temperatura"] },
-    { "word": "temperatura", "hint": "Medida de quente ou frio.", "tags": ["clima","calor","frio","termômetro"] },
-
-    { "word": "terra", "hint": "Solo onde plantas crescem.", "tags": ["solo","barro","plantar","adubo"] },
-    { "word": "solo", "hint": "Camada superficial da terra.", "tags": ["terra","adubo","plantar"] },
-
-    { "word": "poluição", "hint": "Sujeira no ar, água ou solo causada por atividades humanas.", "tags": ["lixo","fumaça","plástico","meio ambiente"] },
-    { "word": "plástico", "hint": "Material comum em embalagens, pode poluir se descartado errado.", "tags": ["lixo","reciclagem","poluição","embalagem"] },
-    { "word": "papel", "hint": "Material feito de fibras, pode ser reciclado.", "tags": ["reciclagem","árvore","celulose","lixo"] },
-    { "word": "vidro", "hint": "Material transparente e reciclável.", "tags": ["reciclagem","garrafa","lixo","transparente"] },
-    { "word": "metal", "hint": "Material resistente, muito usado e reciclável.", "tags": ["reciclagem","alumínio","lata","ferro"] },
-
-    { "word": "coleta seletiva", "hint": "Separar o lixo por tipo para reciclar melhor.", "tags": ["reciclagem","lixo","plástico","papel","vidro","metal"] },
-
-    { "word": "biodiversidade", "hint": "Variedade de seres vivos em um lugar.", "tags": ["natureza","espécies","floresta","vida"] },
-    { "word": "ecossistema", "hint": "Conjunto de seres vivos e ambiente onde vivem.", "tags": ["natureza","biodiversidade","habitat"] },
-    { "word": "habitat", "hint": "Lugar onde um ser vivo mora.", "tags": ["animal","planta","ecossistema","natureza"] }
+    {
+      "word": "praia",
+      "hint": "Faixa de areia ao lado do mar.",
+      "tags": [
+        "areia",
+        "ondas",
+        "verao",
+        "mar",
+        "sol"
+      ]
+    },
+    {
+      "word": "areia",
+      "hint": "Grãos finos encontrados na praia e no deserto.",
+      "tags": [
+        "praia",
+        "dunas",
+        "graos",
+        "deserto"
+      ]
+    },
+    {
+      "word": "vento",
+      "hint": "Ar em movimento.",
+      "tags": [
+        "brisa",
+        "ar",
+        "clima",
+        "duna",
+        "nuvem"
+      ]
+    },
+    {
+      "word": "chuva",
+      "hint": "Água que cai das nuvens.",
+      "tags": [
+        "nuvem",
+        "gotas",
+        "clima",
+        "tempo"
+      ]
+    },
+    {
+      "word": "nuvem",
+      "hint": "Formação no céu que pode trazer chuva.",
+      "tags": [
+        "ceu",
+        "chuva",
+        "vento",
+        "tempest"
+      ]
+    },
+    {
+      "word": "raios",
+      "hint": "Luz forte no céu durante tempestade.",
+      "tags": [
+        "trovao",
+        "chuva",
+        "nuvem",
+        "clima"
+      ]
+    },
+    {
+      "word": "pedra",
+      "hint": "Material sólido encontrado no chão e nas montanhas.",
+      "tags": [
+        "rocha",
+        "rio",
+        "caver",
+        "solo"
+      ]
+    },
+    {
+      "word": "terra",
+      "hint": "Solo onde plantas crescem.",
+      "tags": [
+        "solo",
+        "barro",
+        "adubo",
+        "plant"
+      ]
+    },
+    {
+      "word": "clima",
+      "hint": "Condições do tempo ao longo do tempo.",
+      "tags": [
+        "chuva",
+        "vento",
+        "sol",
+        "temp"
+      ]
+    },
+    {
+      "word": "campo",
+      "hint": "Área aberta com vegetação baixa.",
+      "tags": [
+        "grama",
+        "pasto",
+        "verde",
+        "fazend"
+      ]
+    },
+    {
+      "word": "pasto",
+      "hint": "Vegetação onde animais se alimentam no campo.",
+      "tags": [
+        "campo",
+        "grama",
+        "gado",
+        "verde"
+      ]
+    },
+    {
+      "word": "horta",
+      "hint": "Local de cultivo de alimentos.",
+      "tags": [
+        "terra",
+        "adubo",
+        "plant",
+        "colhe"
+      ]
+    },
+    {
+      "word": "folha",
+      "hint": "Parte verde que ajuda a planta a produzir energia.",
+      "tags": [
+        "verde",
+        "arvor",
+        "planta",
+        "galho"
+      ]
+    },
+    {
+      "word": "fruto",
+      "hint": "Parte da planta que pode conter sementes.",
+      "tags": [
+        "doce",
+        "semen",
+        "arvor",
+        "comida"
+      ]
+    },
+    {
+      "word": "grama",
+      "hint": "Vegetação baixa comum em jardins.",
+      "tags": [
+        "verde",
+        "jard",
+        "campo",
+        "relva"
+      ]
+    },
+    {
+      "word": "adubo",
+      "hint": "Substância que ajuda plantas a crescer.",
+      "tags": [
+        "terra",
+        "comp",
+        "horta",
+        "nutri"
+      ]
+    },
+    {
+      "word": "cacto",
+      "hint": "Planta do deserto que guarda água.",
+      "tags": [
+        "seco",
+        "areia",
+        "espin",
+        "deser"
+      ]
+    },
+    {
+      "word": "bambu",
+      "hint": "Planta alta e oca, cresce rápido.",
+      "tags": [
+        "verde",
+        "cana",
+        "flore",
+        "planta"
+      ]
+    },
+    {
+      "word": "coral",
+      "hint": "Estrutura viva no mar que forma recifes.",
+      "tags": [
+        "mar",
+        "peixe",
+        "recif",
+        "ocea"
+      ]
+    },
+    {
+      "word": "vidro",
+      "hint": "Material transparente e reciclável.",
+      "tags": [
+        "garra",
+        "recic",
+        "lixo",
+        "trans"
+      ]
+    },
+    {
+      "word": "papel",
+      "hint": "Material feito de fibras, pode ser reciclado.",
+      "tags": [
+        "arvor",
+        "recic",
+        "lixo",
+        "celul"
+      ]
+    },
+    {
+      "word": "metal",
+      "hint": "Material resistente, muito usado e reciclável.",
+      "tags": [
+        "lata",
+        "ferro",
+        "recic",
+        "alumi"
+      ]
+    },
+    {
+      "word": "verde",
+      "hint": "Cor comum das folhas e de muitas plantas.",
+      "tags": [
+        "folha",
+        "mata",
+        "grama",
+        "campo"
+      ]
+    },
+    {
+      "word": "selva",
+      "hint": "Região de mata densa e úmida.",
+      "tags": [
+        "mata",
+        "arvor",
+        "bicho",
+        "verde"
+      ]
+    },
+    {
+      "word": "trila",
+      "hint": "Caminho estreito usado em caminhadas na natureza.",
+      "tags": [
+        "mata",
+        "serra",
+        "passe",
+        "pico"
+      ]
+    },
+    {
+      "word": "picos",
+      "hint": "Partes mais altas de uma montanha.",
+      "tags": [
+        "serra",
+        "alto",
+        "neve",
+        "trilha"
+      ]
+    },
+    {
+      "word": "neves",
+      "hint": "Água congelada que cai em flocos (plural).",
+      "tags": [
+        "frio",
+        "gelo",
+        "inver",
+        "monta"
+      ]
+    },
+    {
+      "word": "gatos",
+      "hint": "Animais domésticos que miam (plural).",
+      "tags": [
+        "pet",
+        "miau",
+        "felin",
+        "casa"
+      ]
+    },
+    {
+      "word": "tigre",
+      "hint": "Felino grande com listras.",
+      "tags": [
+        "felin",
+        "selva",
+        "listr",
+        "preda"
+      ]
+    },
+    {
+      "word": "zebra",
+      "hint": "Animal com listras preto e branco.",
+      "tags": [
+        "listr",
+        "savan",
+        "animal",
+        "corr"
+      ]
+    },
+    {
+      "word": "veado",
+      "hint": "Animal de chifres encontrado em florestas.",
+      "tags": [
+        "chifr",
+        "mata",
+        "herbi",
+        "bosqu"
+      ]
+    },
+    {
+      "word": "balei",
+      "hint": "Grande animal do oceano (forma curta no jogo).",
+      "tags": [
+        "mar",
+        "ocea",
+        "gigant",
+        "canto"
+      ]
+    },
+    {
+      "word": "peixe",
+      "hint": "Animal que vive na água e respira por brânquias.",
+      "tags": [
+        "rio",
+        "mar",
+        "nad",
+        "escam"
+      ]
+    },
+    {
+      "word": "ninho",
+      "hint": "Casa feita por aves para colocar ovos.",
+      "tags": [
+        "passa",
+        "ovo",
+        "arvor",
+        "canto"
+      ]
+    },
+    {
+      "word": "canto",
+      "hint": "Som produzido por alguns pássaros.",
+      "tags": [
+        "passa",
+        "ninho",
+        "manh",
+        "som"
+      ]
+    },
+    {
+      "word": "fossa",
+      "hint": "Buraco no solo; pode acumular água e sujeira.",
+      "tags": [
+        "solo",
+        "terra",
+        "lixo",
+        "agua"
+      ]
+    },
+    {
+      "word": "lixos",
+      "hint": "Resíduos que devem ser descartados corretamente (plural).",
+      "tags": [
+        "recic",
+        "papel",
+        "vidro",
+        "metal"
+      ]
+    },
+    {
+      "word": "limpo",
+      "hint": "Sem sujeira; bom para o ambiente.",
+      "tags": [
+        "agua",
+        "ar",
+        "rio",
+        "saude"
+      ]
+    },
+    {
+      "word": "amigo",
+      "hint": "Pessoa com quem você tem amizade.",
+      "tags": [
+        "pessoa",
+        "relacao",
+        "amizade"
+      ]
+    },
+    {
+      "word": "amiga",
+      "hint": "Forma feminina de amigo.",
+      "tags": [
+        "pessoa",
+        "relacao",
+        "amizade"
+      ]
+    },
+    {
+      "word": "arroz",
+      "hint": "Grão muito usado como alimento no prato do dia a dia.",
+      "tags": [
+        "comida",
+        "grao",
+        "cozinha"
+      ]
+    },
+    {
+      "word": "carne",
+      "hint": "Alimento de origem animal, comum em refeições.",
+      "tags": [
+        "comida",
+        "proteina",
+        "cozinha"
+      ]
+    },
+    {
+      "word": "leite",
+      "hint": "Bebida branca produzida por mamíferos.",
+      "tags": [
+        "bebida",
+        "laticinio",
+        "cozinha"
+      ]
+    },
+    {
+      "word": "melao",
+      "hint": "Fruta grande e doce, com muita água.",
+      "tags": [
+        "fruta",
+        "doce",
+        "verao"
+      ]
+    },
+    {
+      "word": "mamao",
+      "hint": "Fruta macia e doce, comum no café da manhã.",
+      "tags": [
+        "fruta",
+        "doce",
+        "cafe"
+      ]
+    },
+    {
+      "word": "cesta",
+      "hint": "Recipiente para carregar objetos ou alimentos.",
+      "tags": [
+        "objeto",
+        "casa",
+        "feira"
+      ]
+    },
+    {
+      "word": "prato",
+      "hint": "Peça usada para servir comida.",
+      "tags": [
+        "cozinha",
+        "objeto",
+        "mesa"
+      ]
+    },
+    {
+      "word": "garfo",
+      "hint": "Talher com dentes usado para comer.",
+      "tags": [
+        "cozinha",
+        "talher",
+        "mesa"
+      ]
+    },
+    {
+      "word": "facas",
+      "hint": "Conjunto de lâminas usadas para cortar (plural).",
+      "tags": [
+        "cozinha",
+        "corte",
+        "talher"
+      ]
+    },
+    {
+      "word": "copos",
+      "hint": "Recipientes para beber líquidos (plural).",
+      "tags": [
+        "cozinha",
+        "bebida",
+        "mesa"
+      ]
+    },
+    {
+      "word": "livro",
+      "hint": "Conjunto de páginas com texto.",
+      "tags": [
+        "leitura",
+        "escola",
+        "cultura"
+      ]
+    },
+    {
+      "word": "lapis",
+      "hint": "Instrumento para escrever ou desenhar.",
+      "tags": [
+        "escola",
+        "escrita",
+        "arte"
+      ]
+    },
+    {
+      "word": "carta",
+      "hint": "Mensagem escrita enviada a alguém.",
+      "tags": [
+        "comunic",
+        "papel",
+        "mensagem"
+      ]
+    },
+    {
+      "word": "caixa",
+      "hint": "Recipiente para guardar coisas.",
+      "tags": [
+        "objeto",
+        "armazen",
+        "casa"
+      ]
+    },
+    {
+      "word": "porta",
+      "hint": "Abertura que permite entrar e sair.",
+      "tags": [
+        "casa",
+        "entrada",
+        "madeira"
+      ]
+    },
+    {
+      "word": "ruela",
+      "hint": "Rua estreita, geralmente antiga.",
+      "tags": [
+        "cidade",
+        "rua",
+        "lugar"
+      ]
+    },
+    {
+      "word": "praca",
+      "hint": "Local público para lazer na cidade.",
+      "tags": [
+        "cidade",
+        "lazer",
+        "lugar"
+      ]
+    },
+    {
+      "word": "ponte",
+      "hint": "Construção para atravessar rios ou vias.",
+      "tags": [
+        "obra",
+        "cidade",
+        "rio"
+      ]
+    },
+    {
+      "word": "barco",
+      "hint": "Embarcação pequena usada na água.",
+      "tags": [
+        "mar",
+        "rio",
+        "transp"
+      ]
+    },
+    {
+      "word": "navio",
+      "hint": "Embarcação grande para viagens no mar.",
+      "tags": [
+        "mar",
+        "transp",
+        "porto"
+      ]
+    },
+    {
+      "word": "porto",
+      "hint": "Lugar onde navios atracam.",
+      "tags": [
+        "mar",
+        "cidade",
+        "transp"
+      ]
+    },
+    {
+      "word": "prazo",
+      "hint": "Tempo limite para algo acontecer.",
+      "tags": [
+        "tempo",
+        "regra",
+        "trabalho"
+      ]
+    },
+    {
+      "word": "tarde",
+      "hint": "Período do dia após o almoço.",
+      "tags": [
+        "tempo",
+        "dia",
+        "rotina"
+      ]
+    },
+    {
+      "word": "noite",
+      "hint": "Período escuro do dia.",
+      "tags": [
+        "tempo",
+        "dia",
+        "sono"
+      ]
+    },
+    {
+      "word": "manha",
+      "hint": "Começo do dia, antes do almoço.",
+      "tags": [
+        "tempo",
+        "dia",
+        "rotina"
+      ]
+    },
+    {
+      "word": "agora",
+      "hint": "Neste momento.",
+      "tags": [
+        "tempo",
+        "momento",
+        "fala"
+      ]
+    },
+    {
+      "word": "ontem",
+      "hint": "Dia anterior ao de hoje.",
+      "tags": [
+        "tempo",
+        "dia",
+        "calend"
+      ]
+    },
+    {
+      "word": "fundo",
+      "hint": "Parte mais baixa ou mais distante.",
+      "tags": [
+        "espaco",
+        "posicao",
+        "lugar"
+      ]
+    },
+    {
+      "word": "certo",
+      "hint": "Correto; sem erro.",
+      "tags": [
+        "qualid",
+        "verdad",
+        "regra"
+      ]
+    },
+    {
+      "word": "claro",
+      "hint": "Com muita luz; fácil de entender.",
+      "tags": [
+        "luz",
+        "qualid",
+        "cor"
+      ]
+    },
+    {
+      "word": "preto",
+      "hint": "Cor escura; ausência de luz.",
+      "tags": [
+        "cor",
+        "visual",
+        "tom"
+      ]
+    },
+    {
+      "word": "cinza",
+      "hint": "Cor entre o branco e o preto.",
+      "tags": [
+        "cor",
+        "visual",
+        "tom"
+      ]
+    },
+    {
+      "word": "bravo",
+      "hint": "Irritado ou valente, dependendo do contexto.",
+      "tags": [
+        "humor",
+        "forca",
+        "emo"
+      ]
+    },
+    {
+      "word": "calmo",
+      "hint": "Tranquilo; sem agitação.",
+      "tags": [
+        "humor",
+        "paz",
+        "emo"
+      ]
+    },
+    {
+      "word": "feliz",
+      "hint": "Com alegria.",
+      "tags": [
+        "emo",
+        "bem",
+        "humor"
+      ]
+    },
+    {
+      "word": "manso",
+      "hint": "Domado; sem agressividade.",
+      "tags": [
+        "animal",
+        "humor",
+        "paz"
+      ]
+    },
+    {
+      "word": "forte",
+      "hint": "Com muita força ou intensidade.",
+      "tags": [
+        "forca",
+        "qualid",
+        "corpo"
+      ]
+    },
+    {
+      "word": "fraco",
+      "hint": "Com pouca força.",
+      "tags": [
+        "forca",
+        "qualid",
+        "corpo"
+      ]
+    },
+    {
+      "word": "longe",
+      "hint": "A uma grande distância.",
+      "tags": [
+        "espaco",
+        "dist",
+        "lugar"
+      ]
+    },
+    {
+      "word": "perto",
+      "hint": "A pequena distância.",
+      "tags": [
+        "espaco",
+        "dist",
+        "lugar"
+      ]
+    },
+    {
+      "word": "baixo",
+      "hint": "De pouca altura.",
+      "tags": [
+        "medida",
+        "altura",
+        "espaco"
+      ]
+    },
+    {
+      "word": "subir",
+      "hint": "Ir para cima.",
+      "tags": [
+        "acao",
+        "mov",
+        "verbo"
+      ]
+    },
+    {
+      "word": "desce",
+      "hint": "Vai para baixo (forma do verbo descer).",
+      "tags": [
+        "acao",
+        "mov",
+        "verbo"
+      ]
+    },
+    {
+      "word": "volta",
+      "hint": "Retorno; também pode ser giro.",
+      "tags": [
+        "acao",
+        "mov",
+        "tempo"
+      ]
+    },
+    {
+      "word": "girar",
+      "hint": "Dar voltas em torno de algo.",
+      "tags": [
+        "acao",
+        "mov",
+        "forma"
+      ]
+    },
+    {
+      "word": "andar",
+      "hint": "Caminhar; deslocar-se a pé.",
+      "tags": [
+        "acao",
+        "mov",
+        "corpo"
+      ]
+    },
+    {
+      "word": "corre",
+      "hint": "Ato de correr; mover-se rapidamente.",
+      "tags": [
+        "acao",
+        "mov",
+        "esporte"
+      ]
+    },
+    {
+      "word": "pular",
+      "hint": "Saltar para cima.",
+      "tags": [
+        "acao",
+        "mov",
+        "corpo"
+      ]
+    },
+    {
+      "word": "nadar",
+      "hint": "Mover-se na água.",
+      "tags": [
+        "acao",
+        "agua",
+        "esporte"
+      ]
+    },
+    {
+      "word": "beber",
+      "hint": "Ingerir líquido.",
+      "tags": [
+        "acao",
+        "bebida",
+        "corpo"
+      ]
+    },
+    {
+      "word": "comer",
+      "hint": "Ingerir alimento.",
+      "tags": [
+        "acao",
+        "comida",
+        "corpo"
+      ]
+    },
+    {
+      "word": "falar",
+      "hint": "Usar a voz para se comunicar.",
+      "tags": [
+        "acao",
+        "voz",
+        "fala"
+      ]
+    },
+    {
+      "word": "ouvir",
+      "hint": "Perceber sons com o ouvido.",
+      "tags": [
+        "acao",
+        "som",
+        "sentido"
+      ]
+    },
+    {
+      "word": "olhar",
+      "hint": "Direcionar a visão para algo.",
+      "tags": [
+        "acao",
+        "visao",
+        "sentido"
+      ]
+    },
+    {
+      "word": "linha",
+      "hint": "Traço comprido; também pode ser de texto.",
+      "tags": [
+        "forma",
+        "texto",
+        "arte"
+      ]
+    },
+    {
+      "word": "ponto",
+      "hint": "Marca pequena; também pode ser local.",
+      "tags": [
+        "forma",
+        "local",
+        "texto"
+      ]
+    },
+    {
+      "word": "curva",
+      "hint": "Linha que se dobra, não reta.",
+      "tags": [
+        "forma",
+        "estrad",
+        "graf"
+      ]
+    },
+    {
+      "word": "nivel",
+      "hint": "Altura relativa; grau ou categoria.",
+      "tags": [
+        "medida",
+        "altura",
+        "grau"
+      ]
+    },
+    {
+      "word": "metro",
+      "hint": "Unidade de medida de comprimento.",
+      "tags": [
+        "medida",
+        "numero",
+        "ciencia"
+      ]
+    },
+    {
+      "word": "valor",
+      "hint": "Importância ou preço de algo.",
+      "tags": [
+        "dinhe",
+        "preco",
+        "qualid"
+      ]
+    },
+    {
+      "word": "custo",
+      "hint": "Preço pago por algo.",
+      "tags": [
+        "dinhe",
+        "preco",
+        "compra"
+      ]
+    },
+    {
+      "word": "saldo",
+      "hint": "Diferença entre entradas e saídas.",
+      "tags": [
+        "dinhe",
+        "conta",
+        "banco"
+      ]
+    },
+    {
+      "word": "troca",
+      "hint": "Ato de substituir uma coisa por outra.",
+      "tags": [
+        "acao",
+        "comerc",
+        "mudanca"
+      ]
+    },
+    {
+      "word": "venda",
+      "hint": "Ato de vender; comércio.",
+      "tags": [
+        "comerc",
+        "dinhe",
+        "loja"
+      ]
+    },
+    {
+      "word": "pagar",
+      "hint": "Dar dinheiro em troca de algo.",
+      "tags": [
+        "dinhe",
+        "compra",
+        "acao"
+      ]
+    },
+    {
+      "word": "carro",
+      "hint": "Veículo de quatro rodas.",
+      "tags": [
+        "transp",
+        "rua",
+        "motor"
+      ]
+    },
+    {
+      "word": "motos",
+      "hint": "Veículos de duas rodas (plural).",
+      "tags": [
+        "transp",
+        "motor",
+        "rua"
+      ]
+    },
+    {
+      "word": "trens",
+      "hint": "Veículos sobre trilhos (plural).",
+      "tags": [
+        "transp",
+        "trilho",
+        "viagem"
+      ]
+    },
+    {
+      "word": "aviao",
+      "hint": "Aeronave que voa.",
+      "tags": [
+        "transp",
+        "ceu",
+        "viagem"
+      ]
+    },
+    {
+      "word": "pista",
+      "hint": "Faixa para correr, pousar ou dirigir.",
+      "tags": [
+        "esporte",
+        "aviao",
+        "rua"
+      ]
+    },
+    {
+      "word": "ruido",
+      "hint": "Som indesejado; barulho.",
+      "tags": [
+        "som",
+        "cidade",
+        "audio"
+      ]
+    },
+    {
+      "word": "somar",
+      "hint": "Adicionar números; fazer soma.",
+      "tags": [
+        "mat",
+        "numero",
+        "acao"
+      ]
+    },
+    {
+      "word": "tempo",
+      "hint": "Medida de duração; também clima.",
+      "tags": [
+        "tempo",
+        "clima",
+        "dia"
+      ]
+    },
+    {
+      "word": "nobre",
+      "hint": "De alta classe; também generoso.",
+      "tags": [
+        "qualid",
+        "pessoa",
+        "moral"
+      ]
+    },
+    {
+      "word": "justo",
+      "hint": "Correto; com justiça.",
+      "tags": [
+        "moral",
+        "regra",
+        "qualid"
+      ]
+    },
+    {
+      "word": "legal",
+      "hint": "Algo bacana; também relativo à lei.",
+      "tags": [
+        "qualid",
+        "lei",
+        "giria"
+      ]
+    },
+    {
+      "word": "etica",
+      "hint": "Conjunto de valores morais.",
+      "tags": [
+        "moral",
+        "regra",
+        "socie"
+      ]
+    },
+    {
+      "word": "saude",
+      "hint": "Condição de bem-estar do corpo.",
+      "tags": [
+        "corpo",
+        "bem",
+        "vida"
+      ]
+    },
+    {
+      "word": "dores",
+      "hint": "Sensações de dor (plural).",
+      "tags": [
+        "corpo",
+        "saude",
+        "sinal"
+      ]
+    },
+    {
+      "word": "febre",
+      "hint": "Aumento da temperatura corporal.",
+      "tags": [
+        "saude",
+        "sint",
+        "corpo"
+      ]
+    },
+    {
+      "word": "tosse",
+      "hint": "Reflexo de expulsar ar pela garganta.",
+      "tags": [
+        "saude",
+        "sint",
+        "pulmao"
+      ]
+    },
+    {
+      "word": "nariz",
+      "hint": "Parte do rosto usada para respirar e cheirar.",
+      "tags": [
+        "corpo",
+        "sent",
+        "rosto"
+      ]
+    },
+    {
+      "word": "bocas",
+      "hint": "Aberturas do rosto para comer e falar (plural).",
+      "tags": [
+        "corpo",
+        "rosto",
+        "fala"
+      ]
+    },
+    {
+      "word": "dente",
+      "hint": "Parte dura usada para mastigar.",
+      "tags": [
+        "corpo",
+        "boca",
+        "saude"
+      ]
+    },
+    {
+      "word": "olhos",
+      "hint": "Órgãos da visão (plural).",
+      "tags": [
+        "corpo",
+        "visao",
+        "rosto"
+      ]
+    },
+    {
+      "word": "braco",
+      "hint": "Membro superior do corpo.",
+      "tags": [
+        "corpo",
+        "membro",
+        "forca"
+      ]
+    },
+    {
+      "word": "perna",
+      "hint": "Membro usado para andar.",
+      "tags": [
+        "corpo",
+        "membro",
+        "mov"
+      ]
+    },
+    {
+      "word": "palma",
+      "hint": "Parte interna da mão.",
+      "tags": [
+        "corpo",
+        "membro",
+        "tato"
+      ]
+    },
+    {
+      "word": "dedos",
+      "hint": "Partes das mãos (plural).",
+      "tags": [
+        "corpo",
+        "membro",
+        "tato"
+      ]
+    },
+    {
+      "word": "cabel",
+      "hint": "Conjunto de fios na cabeça (forma sem acento).",
+      "tags": [
+        "corpo",
+        "cabelo",
+        "cabeca"
+      ]
+    },
+    {
+      "word": "barba",
+      "hint": "Pelos no rosto.",
+      "tags": [
+        "corpo",
+        "rosto",
+        "pelos"
+      ]
+    },
+    {
+      "word": "roupa",
+      "hint": "Peça de vestir.",
+      "tags": [
+        "moda",
+        "corpo",
+        "casa"
+      ]
+    },
+    {
+      "word": "calca",
+      "hint": "Peça de roupa para as pernas (sem acento).",
+      "tags": [
+        "moda",
+        "roupa",
+        "corpo"
+      ]
+    },
+    {
+      "word": "meias",
+      "hint": "Peças usadas nos pés (plural).",
+      "tags": [
+        "moda",
+        "roupa",
+        "pe"
+      ]
+    },
+    {
+      "word": "tenis",
+      "hint": "Calçado esportivo (sem acento).",
+      "tags": [
+        "moda",
+        "pe",
+        "esporte"
+      ]
+    },
+    {
+      "word": "bolsa",
+      "hint": "Acessório para carregar itens.",
+      "tags": [
+        "moda",
+        "objeto",
+        "casa"
+      ]
+    },
+    {
+      "word": "cinto",
+      "hint": "Faixa usada na cintura.",
+      "tags": [
+        "moda",
+        "roupa",
+        "casa"
+      ]
+    },
+    {
+      "word": "bonet",
+      "hint": "Acessório de cabeça, tipo boné (sem acento).",
+      "tags": [
+        "moda",
+        "cabeca",
+        "sol"
+      ]
+    },
+    {
+      "word": "chape",
+      "hint": "Cobertura de cabeça, tipo chapéu (sem acento).",
+      "tags": [
+        "moda",
+        "cabeca",
+        "sol"
+      ]
+    },
+    {
+      "word": "relog",
+      "hint": "Objeto que marca as horas (sem acento).",
+      "tags": [
+        "tempo",
+        "objeto",
+        "casa"
+      ]
+    },
+    {
+      "word": "mouse",
+      "hint": "Dispositivo para controlar o computador.",
+      "tags": [
+        "tecno",
+        "pc",
+        "acao"
+      ]
+    },
+    {
+      "word": "tecla",
+      "hint": "Botão do teclado.",
+      "tags": [
+        "tecno",
+        "pc",
+        "texto"
+      ]
+    },
+    {
+      "word": "telha",
+      "hint": "Peça usada para cobrir telhados.",
+      "tags": [
+        "casa",
+        "obra",
+        "teto"
+      ]
+    },
+    {
+      "word": "video",
+      "hint": "Conteúdo com imagem em movimento.",
+      "tags": [
+        "midia",
+        "tv",
+        "tecno"
+      ]
+    },
+    {
+      "word": "audio",
+      "hint": "Som gravado.",
+      "tags": [
+        "som",
+        "midia",
+        "tecno"
+      ]
+    },
+    {
+      "word": "login",
+      "hint": "Ato/credencial para entrar num sistema.",
+      "tags": [
+        "tecno",
+        "conta",
+        "senha"
+      ]
+    },
+    {
+      "word": "senha",
+      "hint": "Código secreto de acesso.",
+      "tags": [
+        "segur",
+        "tecno",
+        "conta"
+      ]
+    },
+    {
+      "word": "email",
+      "hint": "Correio eletrônico.",
+      "tags": [
+        "tecno",
+        "mensag",
+        "web"
+      ]
+    },
+    {
+      "word": "dados",
+      "hint": "Informações armazenadas (plural).",
+      "tags": [
+        "tecno",
+        "info",
+        "pc"
+      ]
+    },
+    {
+      "word": "copia",
+      "hint": "Duplicata de algo.",
+      "tags": [
+        "tecno",
+        "arquivo",
+        "segur"
+      ]
+    },
+    {
+      "word": "pasta",
+      "hint": "Diretório para organizar arquivos.",
+      "tags": [
+        "tecno",
+        "pc",
+        "arquivo"
+      ]
+    },
+    {
+      "word": "lista",
+      "hint": "Conjunto de itens em sequência.",
+      "tags": [
+        "texto",
+        "org",
+        "taref"
+      ]
+    },
+    {
+      "word": "texto",
+      "hint": "Conjunto de palavras escritas.",
+      "tags": [
+        "leitura",
+        "escrita",
+        "ling"
+      ]
+    },
+    {
+      "word": "frase",
+      "hint": "Sequência de palavras com sentido.",
+      "tags": [
+        "ling",
+        "texto",
+        "escrita"
+      ]
+    },
+    {
+      "word": "letra",
+      "hint": "Sinal do alfabeto.",
+      "tags": [
+        "ling",
+        "escrita",
+        "texto"
+      ]
+    },
+    {
+      "word": "sinal",
+      "hint": "Marca que indica algo.",
+      "tags": [
+        "placa",
+        "aviso",
+        "texto"
+      ]
+    },
+    {
+      "word": "icone",
+      "hint": "Símbolo gráfico de um app.",
+      "tags": [
+        "tecno",
+        "ui",
+        "simbo"
+      ]
+    },
+    {
+      "word": "botao",
+      "hint": "Peça que você aperta para acionar algo.",
+      "tags": [
+        "objeto",
+        "tecno",
+        "acao"
+      ]
+    },
+    {
+      "word": "trigo",
+      "hint": "Grão usado para fazer farinha e pães.",
+      "tags": [
+        "comida",
+        "grao",
+        "farin"
+      ]
+    },
+    {
+      "word": "corpo",
+      "hint": "Parte física de uma pessoa.",
+      "tags": [
+        "corpo",
+        "saude",
+        "vida"
+      ]
+    },
+    {
+      "word": "mente",
+      "hint": "Capacidade de pensar.",
+      "tags": [
+        "psico",
+        "pensar",
+        "vida"
+      ]
+    },
+    {
+      "word": "sonho",
+      "hint": "Experiência durante o sono; também desejo.",
+      "tags": [
+        "sono",
+        "mente",
+        "vida"
+      ]
+    },
+    {
+      "word": "risos",
+      "hint": "Expressão de alegria (plural).",
+      "tags": [
+        "emo",
+        "alegr",
+        "som"
+      ]
+    },
+    {
+      "word": "grito",
+      "hint": "Grito alto; voz elevada.",
+      "tags": [
+        "som",
+        "voz",
+        "emo"
+      ]
+    },
+    {
+      "word": "calor",
+      "hint": "Sensação de quente.",
+      "tags": [
+        "clima",
+        "temp",
+        "corpo"
+      ]
+    },
+    {
+      "word": "frios",
+      "hint": "Temperaturas baixas; o oposto de calor (plural).",
+      "tags": [
+        "clima",
+        "temp",
+        "gelo"
+      ]
+    },
+    {
+      "word": "cobra",
+      "hint": "Réptil alongado sem patas.",
+      "tags": [
+        "animal",
+        "rept",
+        "selva"
+      ]
+    },
+    {
+      "word": "ratos",
+      "hint": "Roedores comuns em cidades (plural).",
+      "tags": [
+        "animal",
+        "roedor",
+        "cidade"
+      ]
+    },
+    {
+      "word": "patos",
+      "hint": "Aves aquáticas (plural).",
+      "tags": [
+        "animal",
+        "ave",
+        "agua"
+      ]
+    },
+    {
+      "word": "ganso",
+      "hint": "Ave de pescoço longo.",
+      "tags": [
+        "animal",
+        "ave",
+        "agua"
+      ]
+    },
+    {
+      "word": "pomba",
+      "hint": "Ave comum em praças.",
+      "tags": [
+        "animal",
+        "ave",
+        "cidade"
+      ]
+    },
+    {
+      "word": "corvo",
+      "hint": "Ave preta associada a presságios.",
+      "tags": [
+        "animal",
+        "ave",
+        "preto"
+      ]
+    },
+    {
+      "word": "urubu",
+      "hint": "Ave que se alimenta de carniça.",
+      "tags": [
+        "animal",
+        "ave",
+        "nature"
+      ]
+    },
+    {
+      "word": "lebre",
+      "hint": "Animal parecido com coelho, muito rápido.",
+      "tags": [
+        "animal",
+        "campo",
+        "corr"
+      ]
+    },
+    {
+      "word": "lobos",
+      "hint": "Canídeos selvagens (plural).",
+      "tags": [
+        "animal",
+        "selva",
+        "grupo"
+      ]
+    },
+    {
+      "word": "cabra",
+      "hint": "Animal criado em fazendas.",
+      "tags": [
+        "animal",
+        "campo",
+        "leite"
+      ]
+    },
+    {
+      "word": "vacas",
+      "hint": "Animais que produzem leite (plural).",
+      "tags": [
+        "animal",
+        "campo",
+        "leite"
+      ]
+    },
+    {
+      "word": "tubao",
+      "hint": "Peixe grande predador (sem acento).",
+      "tags": [
+        "mar",
+        "animal",
+        "preda"
+      ]
+    },
+    {
+      "word": "polvo",
+      "hint": "Animal marinho com oito braços.",
+      "tags": [
+        "mar",
+        "animal",
+        "tentac"
+      ]
+    },
+    {
+      "word": "focas",
+      "hint": "Mamíferos marinhos (plural).",
+      "tags": [
+        "mar",
+        "animal",
+        "frio"
+      ]
+    },
+    {
+      "word": "vespa",
+      "hint": "Inseto parecido com abelha, pode picar.",
+      "tags": [
+        "inset",
+        "animal",
+        "dor"
+      ]
+    },
+    {
+      "word": "mosca",
+      "hint": "Inseto comum, voa e incomoda.",
+      "tags": [
+        "inset",
+        "animal",
+        "casa"
+      ]
+    },
+    {
+      "word": "pulga",
+      "hint": "Inseto pequeno que pula e pode picar.",
+      "tags": [
+        "inset",
+        "animal",
+        "pet"
+      ]
+    },
+    {
+      "word": "carpa",
+      "hint": "Peixe de água doce.",
+      "tags": [
+        "rio",
+        "animal",
+        "peixe"
+      ]
+    },
+    {
+      "word": "truta",
+      "hint": "Peixe de rio, comum em águas frias.",
+      "tags": [
+        "rio",
+        "animal",
+        "peixe"
+      ]
+    },
+    {
+      "word": "sarda",
+      "hint": "Peixe pequeno também chamado sardinha (forma curta).",
+      "tags": [
+        "mar",
+        "peixe",
+        "comida"
+      ]
+    },
+    {
+      "word": "garca",
+      "hint": "Ave de pernas longas que vive perto d'água (sem acento).",
+      "tags": [
+        "ave",
+        "rio",
+        "lagoa"
+      ]
+    },
+    {
+      "word": "pavao",
+      "hint": "Ave conhecida pela cauda colorida (sem acento).",
+      "tags": [
+        "ave",
+        "pluma",
+        "cor"
+      ]
+    },
+    {
+      "word": "arara",
+      "hint": "Ave colorida típica do Brasil.",
+      "tags": [
+        "ave",
+        "cor",
+        "selva"
+      ]
+    },
+    {
+      "word": "sagui",
+      "hint": "Pequeno macaco brasileiro.",
+      "tags": [
+        "animal",
+        "selva",
+        "macac"
+      ]
+    },
+    {
+      "word": "tatus",
+      "hint": "Mamíferos com carapaça (plural).",
+      "tags": [
+        "animal",
+        "terra",
+        "casca"
+      ]
+    },
+    {
+      "word": "capim",
+      "hint": "Planta rasteira; pasto para animais.",
+      "tags": [
+        "planta",
+        "campo",
+        "verde"
+      ]
+    },
+    {
+      "word": "seiva",
+      "hint": "Líquido que circula nas plantas.",
+      "tags": [
+        "planta",
+        "arvor",
+        "vida"
+      ]
+    },
+    {
+      "word": "broto",
+      "hint": "Parte nova que nasce na planta.",
+      "tags": [
+        "planta",
+        "horta",
+        "novo"
+      ]
+    },
+    {
+      "word": "galho",
+      "hint": "Ramo de uma árvore.",
+      "tags": [
+        "arvor",
+        "planta",
+        "madei"
+      ]
+    },
+    {
+      "word": "lagoa",
+      "hint": "Pequeno lago.",
+      "tags": [
+        "agua",
+        "nature",
+        "rio"
+      ]
+    },
+    {
+      "word": "serra",
+      "hint": "Cadeia de montanhas; região elevada.",
+      "tags": [
+        "monta",
+        "nature",
+        "alto"
+      ]
+    },
+    {
+      "word": "morro",
+      "hint": "Elevação menor que montanha.",
+      "tags": [
+        "monta",
+        "nature",
+        "alto"
+      ]
+    },
+    {
+      "word": "dunas",
+      "hint": "Montes de areia moldados pelo vento (plural).",
+      "tags": [
+        "areia",
+        "vento",
+        "praia"
+      ]
+    },
+    {
+      "word": "banho",
+      "hint": "Ato de se lavar com água.",
+      "tags": [
+        "casa",
+        "agua",
+        "saude"
+      ]
+    },
+    {
+      "word": "sabao",
+      "hint": "Produto usado para lavar e limpar (sem acento).",
+      "tags": [
+        "limp",
+        "casa",
+        "banho"
+      ]
+    },
+    {
+      "word": "piano",
+      "hint": "Instrumento musical de teclas.",
+      "tags": [
+        "musica",
+        "som",
+        "arte"
+      ]
+    },
+    {
+      "word": "radio",
+      "hint": "Aparelho/meio de comunicação por ondas.",
+      "tags": [
+        "midia",
+        "som",
+        "notic"
+      ]
+    },
+    {
+      "word": "filme",
+      "hint": "Obra audiovisual de cinema.",
+      "tags": [
+        "midia",
+        "arte",
+        "video"
+      ]
+    },
+    {
+      "word": "serie",
+      "hint": "Programa dividido em episódios.",
+      "tags": [
+        "midia",
+        "tv",
+        "video"
+      ]
+    },
+    {
+      "word": "jogos",
+      "hint": "Atividades de brincar/competir (plural).",
+      "tags": [
+        "lazer",
+        "game",
+        "diver"
+      ]
+    },
+    {
+      "word": "danca",
+      "hint": "Movimento do corpo com música (sem acento).",
+      "tags": [
+        "arte",
+        "musica",
+        "corpo"
+      ]
+    },
+    {
+      "word": "risco",
+      "hint": "Perigo; chance de dar errado.",
+      "tags": [
+        "perig",
+        "vida",
+        "cuidado"
+      ]
+    },
+    {
+      "word": "renda",
+      "hint": "Dinheiro ganho; também tecido rendado.",
+      "tags": [
+        "dinhe",
+        "traba",
+        "casa"
+      ]
+    },
+    {
+      "word": "banda",
+      "hint": "Grupo musical; também faixa lateral.",
+      "tags": [
+        "musica",
+        "grupo",
+        "som"
+      ]
+    },
+    {
+      "word": "chave",
+      "hint": "Objeto que abre fechaduras.",
+      "tags": [
+        "casa",
+        "segur",
+        "metal"
+      ]
+    },
+    {
+      "word": "tinta",
+      "hint": "Líquido usado para pintar.",
+      "tags": [
+        "arte",
+        "cor",
+        "pint"
+      ]
+    },
+    {
+      "word": "forma",
+      "hint": "Molde; também jeito de ser.",
+      "tags": [
+        "objeto",
+        "molde",
+        "ideia"
+      ]
+    },
+    {
+      "word": "frota",
+      "hint": "Conjunto de veículos.",
+      "tags": [
+        "transp",
+        "grupo",
+        "carro"
+      ]
+    },
+    {
+      "word": "grupo",
+      "hint": "Conjunto de pessoas ou coisas.",
+      "tags": [
+        "pessoa",
+        "time",
+        "org"
+      ]
+    },
+    {
+      "word": "turma",
+      "hint": "Grupo de alunos ou amigos.",
+      "tags": [
+        "escola",
+        "pessoa",
+        "grupo"
+      ]
+    },
+    {
+      "word": "lindo",
+      "hint": "Bonito; agradável de ver.",
+      "tags": [
+        "qualid",
+        "visual",
+        "emo"
+      ]
+    },
+    {
+      "word": "feira",
+      "hint": "Lugar/tempo de vender produtos.",
+      "tags": [
+        "cidade",
+        "comerc",
+        "comida"
+      ]
+    },
+    {
+      "word": "lojas",
+      "hint": "Estabelecimentos que vendem coisas (plural).",
+      "tags": [
+        "cidade",
+        "comerc",
+        "compra"
+      ]
+    },
+    {
+      "word": "santo",
+      "hint": "Pessoa considerada sagrada.",
+      "tags": [
+        "relig",
+        "pessoa",
+        "fe"
+      ]
+    },
+    {
+      "word": "mundo",
+      "hint": "O planeta; também a vida em geral.",
+      "tags": [
+        "terra",
+        "vida",
+        "planeta"
+      ]
+    },
+    {
+      "word": "gente",
+      "hint": "Pessoas; coletivo informal.",
+      "tags": [
+        "pessoa",
+        "socie",
+        "grupo"
+      ]
+    },
+    {
+      "word": "amora",
+      "hint": "Fruta pequena e doce, usada em geleias.",
+      "tags": [
+        "fruta",
+        "doce",
+        "geleia"
+      ]
+    },
+    {
+      "word": "manga",
+      "hint": "Fruta tropical muito suculenta.",
+      "tags": [
+        "fruta",
+        "tropi",
+        "doce"
+      ]
+    },
+    {
+      "word": "cajus",
+      "hint": "Frutos do cajueiro (plural).",
+      "tags": [
+        "fruta",
+        "tropi",
+        "casta"
+      ]
+    },
+    {
+      "word": "pizza",
+      "hint": "Prato assado com massa e cobertura.",
+      "tags": [
+        "comida",
+        "massa",
+        "forno"
+      ]
+    },
+    {
+      "word": "massa",
+      "hint": "Base de pães e macarrão; mistura de farinha.",
+      "tags": [
+        "comida",
+        "cozinha",
+        "farin"
+      ]
+    },
+    {
+      "word": "sabor",
+      "hint": "Gosto de um alimento.",
+      "tags": [
+        "comida",
+        "sent",
+        "doce"
+      ]
+    },
+    {
+      "word": "doces",
+      "hint": "Sobremesas açucaradas (plural, sem acento).",
+      "tags": [
+        "comida",
+        "acuca",
+        "festa"
+      ]
+    },
+    {
+      "word": "salto",
+      "hint": "Ato de pular; também elevação.",
+      "tags": [
+        "acao",
+        "mov",
+        "altura"
+      ]
+    },
+    {
+      "word": "sobra",
+      "hint": "O que resta; parte que ficou.",
+      "tags": [
+        "resto",
+        "comida",
+        "acao"
+      ]
+    },
+    {
+      "word": "choro",
+      "hint": "Ato de chorar; lágrimas.",
+      "tags": [
+        "emo",
+        "triste",
+        "voz"
+      ]
+    },
+    {
+      "word": "brisa",
+      "hint": "Vento fraco e agradável.",
+      "tags": [
+        "vento",
+        "clima",
+        "praia"
+      ]
+    },
+    {
+      "word": "festa",
+      "hint": "Evento de comemoração.",
+      "tags": [
+        "lazer",
+        "musica",
+        "gente"
+      ]
+    },
+    {
+      "word": "folia",
+      "hint": "Brincadeira e alegria, como no carnaval.",
+      "tags": [
+        "lazer",
+        "alegr",
+        "canto"
+      ]
+    },
+    {
+      "word": "circo",
+      "hint": "Lugar de shows com palhaços e acrobatas.",
+      "tags": [
+        "lazer",
+        "arte",
+        "show"
+      ]
+    },
+    {
+      "word": "tribo",
+      "hint": "Grupo social com cultura própria.",
+      "tags": [
+        "pessoa",
+        "cultura",
+        "grupo"
+      ]
+    },
+    {
+      "word": "natal",
+      "hint": "Data comemorativa no fim do ano.",
+      "tags": [
+        "data",
+        "festa",
+        "ano"
+      ]
+    }
   ]
 }
