@@ -100,7 +100,7 @@ const GameScreen = () => {
   };
 
   const handleNextWord = () => {
-    resetRound(); // sorteia outra e reseta tudo na mesma tela
+    resetRound(); 
   };
 
   const feedbackMeta = (() => {
