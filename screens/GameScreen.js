@@ -1,4 +1,3 @@
-// GameScreen.js
 import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import {
   View,
@@ -95,13 +94,24 @@ const GameScreen = () => {
   const inputRef = useRef(null);
 
   const [current, setCurrent] = useState(null);
-  const [currentGuess, setCurrentGuess] = useState("");
+
+  // ✅ Agora cada célula é independente
+  const [currentLetters, setCurrentLetters] = useState(
+    Array(WORD_LENGTH).fill("")
+  );
+  const [selectedCol, setSelectedCol] = useState(0);
+
+  // string derivada (para submit e validações)
+  const currentGuess = useMemo(
+    () => currentLetters.join(""),
+    [currentLetters]
+  );
+
   const [attempts, setAttempts] = useState([]); // [{ guessRaw, evaluation }]
   const [message, setMessage] = useState("");
   const [done, setDone] = useState(false);
 
   // ===== animação de flip (giro) por célula =====
-  // usamos 6x5 Animated.Value (um para cada quadrado do tabuleiro)
   const flipsRef = useRef(
     Array.from({ length: MAX_TRIES }, () =>
       Array.from({ length: WORD_LENGTH }, () => new Animated.Value(0))
@@ -128,7 +138,8 @@ const GameScreen = () => {
     const next = pickRandomItem();
     setCurrent(next);
     setAttempts([]);
-    setCurrentGuess("");
+    setCurrentLetters(Array(WORD_LENGTH).fill(""));
+    setSelectedCol(0);
     setMessage("");
     setDone(false);
     resetAnimations();
@@ -143,7 +154,7 @@ const GameScreen = () => {
 
   const canSubmit =
     !done &&
-    normalize(currentGuess).length === WORD_LENGTH &&
+    currentLetters.every((ch) => normalize(ch).length === 1) &&
     attempts.length < MAX_TRIES &&
     !isAnimatingRef.current;
 
@@ -168,13 +179,57 @@ const GameScreen = () => {
     });
   };
 
+  const focusInput = useCallback(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const setCell = useCallback((index, value) => {
+    const letter = (value || "")
+      .replace(/[^a-zA-ZÀ-ÿ]/g, "")
+      .slice(-1); // garante 1 char
+
+    if (!letter) return;
+
+    setCurrentLetters((prev) => {
+      const next = [...prev];
+      next[index] = letter;
+      return next;
+    });
+
+    // avança coluna (ou mantém última)
+    setSelectedCol(Math.min(index + 1, WORD_LENGTH - 1));
+
+    // mantém input vazio pra disparar onChange sempre
+    requestAnimationFrame(() => inputRef.current?.clear?.());
+  }, []);
+
+  const handleBackspace = useCallback(() => {
+    setCurrentLetters((prev) => {
+      const next = [...prev];
+
+      // se célula atual tem letra, apaga
+      if (next[selectedCol]) {
+        next[selectedCol] = "";
+        return next;
+      }
+
+      // se estiver vazia, volta e apaga a anterior
+      const back = Math.max(0, selectedCol - 1);
+      next[back] = "";
+      setSelectedCol(back);
+      return next;
+    });
+
+    requestAnimationFrame(() => inputRef.current?.clear?.());
+  }, [selectedCol]);
+
   const handleSubmit = async () => {
     if (!answerWord) {
       setMessage("Nenhuma palavra disponível no arquivo JSON.");
       return;
     }
 
-    const raw = currentGuess.trim();
+    const raw = currentLetters.join("");
     const norm = normalize(raw);
 
     if (norm.length !== WORD_LENGTH) {
@@ -223,16 +278,22 @@ const GameScreen = () => {
       return;
     }
 
-    setCurrentGuess("");
-  };
-
-  const handleKeyInput = (text) => {
-    const onlyLetters = (text || "").replace(/[^a-zA-ZÀ-ÿ]/g, "");
-    setCurrentGuess(onlyLetters.slice(0, WORD_LENGTH));
+    // limpa linha atual
+    setCurrentLetters(Array(WORD_LENGTH).fill(""));
+    setSelectedCol(0);
+    requestAnimationFrame(() => inputRef.current?.clear?.());
   };
 
   // ✅ key única por célula (resolve warning)
-  const renderCell = (row, col, char, status, isActive, isCurrentRow) => {
+  const renderCell = (
+    row,
+    col,
+    char,
+    status,
+    isActive,
+    isCurrentRow,
+    onPress
+  ) => {
     const flipVal = flipsRef.current[row][col];
     const rotateX = flipVal.interpolate({
       inputRange: [0, 1],
@@ -243,20 +304,23 @@ const GameScreen = () => {
       ? { transform: [{ perspective: 800 }, { rotateX }] }
       : null;
 
+    const Wrapper = isCurrentRow ? Pressable : View;
+
     return (
-      <Animated.View
-        key={`cell-${row}-${col}`}
-        style={[
-          styles.cell,
-          status === "correct" && styles.cellCorrect,
-          status === "present" && styles.cellPresent,
-          status === "absent" && styles.cellAbsent,
-          isActive && styles.cellActive,
-          animatedStyle,
-        ]}
-      >
-        <Text style={styles.cellText}>{(char || "").toUpperCase()}</Text>
-      </Animated.View>
+      <Wrapper key={`cell-${row}-${col}`} onPress={onPress} style={{ flex: 1 }}>
+        <Animated.View
+          style={[
+            styles.cell,
+            status === "correct" && styles.cellCorrect,
+            status === "present" && styles.cellPresent,
+            status === "absent" && styles.cellAbsent,
+            isActive && styles.cellActive,
+            animatedStyle,
+          ]}
+        >
+          <Text style={styles.cellText}>{(char || "").toUpperCase()}</Text>
+        </Animated.View>
+      </Wrapper>
     );
   };
 
@@ -279,12 +343,22 @@ const GameScreen = () => {
       }
 
       if (r === attempts.length && !done) {
-        const chars = currentGuess.split("");
         rows.push(
           <View key={`row-${r}`} style={styles.row}>
             {Array.from({ length: WORD_LENGTH }).map((_, c) => {
-              const isActive = c === chars.length && chars.length < WORD_LENGTH;
-              return renderCell(r, c, chars[c] || "", null, isActive, true);
+              const isActive = c === selectedCol; // cursor
+              return renderCell(
+                r,
+                c,
+                currentLetters[c] || "",
+                null,
+                isActive,
+                true,
+                () => {
+                  setSelectedCol(c);
+                  focusInput();
+                }
+              );
             })}
           </View>
         );
@@ -316,11 +390,11 @@ const GameScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={styles.kicker}>Context</Text>
+          <Text style={styles.kicker}>By: @Patrikybrito_Dev</Text>
           <Text style={styles.title}>Adivinhe a Palavra</Text>
           <Text style={styles.subtitle}>
-            Digite uma palavra de 5 letras. Verde = posição correta, amarelo = existe em
-            outra posição, cinza = não existe.
+            Digite uma palavra de 5 letras. Verde = posição correta, amarelo =
+            existe em outra posição, cinza = não existe.
           </Text>
         </View>
 
@@ -334,19 +408,24 @@ const GameScreen = () => {
             </View>
           </View>
 
-          <Pressable onPress={() => inputRef.current?.focus()} style={styles.board}>
+          {/* Board: tocar foca o input */}
+          <Pressable onPress={focusInput} style={styles.board}>
             {renderBoard()}
           </Pressable>
 
-         
+          {/* Input invisível: 1 letra por vez, cai na célula selecionada */}
           <TextInput
             ref={inputRef}
-            value={currentGuess}
-            onChangeText={handleKeyInput}
+            value={""}
+            onChangeText={(t) => setCell(selectedCol, t)}
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === "Backspace") handleBackspace();
+            }}
             autoCapitalize="characters"
             autoCorrect={false}
             returnKeyType="done"
             onSubmitEditing={handleSubmit}
+            maxLength={1}
             style={styles.hiddenInput}
           />
 
@@ -356,7 +435,10 @@ const GameScreen = () => {
             style={({ pressed }) => [
               styles.primaryBtn,
               !canSubmit && { opacity: 0.5 },
-              pressed && canSubmit && { transform: [{ scale: 0.99 }], opacity: 0.95 },
+              pressed && canSubmit && {
+                transform: [{ scale: 0.99 }],
+                opacity: 0.95,
+              },
             ]}
           >
             <Text style={styles.primaryBtnText}>Verificar</Text>
@@ -365,12 +447,16 @@ const GameScreen = () => {
           {!!message && <Text style={styles.message}>{message}</Text>}
 
           <Text style={styles.note}>
-            Os acentos são preenchidos automaticamente, e não são considerados nas dicas.
+            Os acentos são preenchidos automaticamente, e não são considerados
+            nas dicas.
           </Text>
 
           <Pressable
             onPress={resetRound}
-            style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.9 }]}
+            style={({ pressed }) => [
+              styles.secondaryBtn,
+              pressed && { opacity: 0.9 },
+            ]}
           >
             <Text style={styles.secondaryBtnText}>Reiniciar agora</Text>
           </Pressable>
