@@ -154,12 +154,18 @@ const createStyles = (t) =>
       flexGrow: 1,
     },
     header: { marginBottom: 18 },
-    title: {
-      color: t.text,
+
+    titleRow: {
+      flexDirection: "row",
+      alignSelf: "center",
+      alignItems: "center",
+    },
+    titleChar: {
       fontSize: 28,
       fontWeight: "800",
-      alignSelf: "center",
+      letterSpacing: 1,
     },
+
     kicker: {
       color: t.kicker,
       fontSize: 12,
@@ -370,6 +376,8 @@ const createStyles = (t) =>
     },
     modalCloseText: { color: "#fff", fontSize: 15, fontWeight: "700" },
   });
+
+const TITLE_COLORS = ["#22C55E", "#3B82F6", "#F59E0B", "#EF4444", "#A855F7", "#06B6D4", "#F97316"];
 
 const GameScreen = () => {
   const items = useMemo(() => {
@@ -678,6 +686,25 @@ const GameScreen = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   }, []);
 
+  const renderColoredTitle = () => {
+    const text = "CONTEXT";
+    return (
+      <View style={styles.titleRow}>
+        {text.split("").map((ch, idx) => (
+          <Text
+            key={`title-${idx}-${ch}`}
+            style={[
+              styles.titleChar,
+              { color: TITLE_COLORS[idx % TITLE_COLORS.length] },
+            ]}
+          >
+            {ch}
+          </Text>
+        ))}
+      </View>
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.screen}
@@ -690,11 +717,9 @@ const GameScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={styles.title}>CONTEXT</Text>
+          {renderColoredTitle()}
 
           <View style={styles.tutorialRow}>
-            
-
             <View style={styles.rightHeaderGroup}>
               <Pressable
                 onPress={() => setShowTutorial(true)}
@@ -713,23 +738,17 @@ const GameScreen = () => {
               <Text style={styles.scorePillLabel}>Pontuação</Text>
               <Text style={styles.scorePillValue}>{scoreLoaded ? score : "—"}</Text>
             </View>
-
             <Pressable
                 onPress={toggleTheme}
                 style={({ pressed }) => [
                   styles.pillBtn,
                   pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
-                  {
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: "right", },
                 ]}
               >
                 <Text style={styles.pillBtnText}>
                   {theme === "dark" ? "☀️" : "🌙"}
                 </Text>
               </Pressable>
-
           </View>
         </View>
 
