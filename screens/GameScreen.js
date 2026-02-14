@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import {
   View,
   Text,
@@ -377,7 +383,15 @@ const createStyles = (t) =>
     modalCloseText: { color: "#fff", fontSize: 15, fontWeight: "700" },
   });
 
-const TITLE_COLORS = ["#22C55E", "#3B82F6", "#F59E0B", "#EF4444", "#A855F7", "#06B6D4", "#F97316"];
+const TITLE_COLORS = [
+  "#22C55E",
+  "#3B82F6",
+  "#F59E0B",
+  "#EF4444",
+  "#A855F7",
+  "#06B6D4",
+  "#F97316",
+];
 
 const GameScreen = () => {
   const items = useMemo(() => {
@@ -392,7 +406,9 @@ const GameScreen = () => {
   const inputRef = useRef(null);
 
   const [current, setCurrent] = useState(null);
-  const [currentLetters, setCurrentLetters] = useState(Array(WORD_LENGTH).fill(""));
+  const [currentLetters, setCurrentLetters] = useState(
+    Array(WORD_LENGTH).fill(""),
+  );
   const [selectedCol, setSelectedCol] = useState(0);
 
   const [attempts, setAttempts] = useState([]);
@@ -407,8 +423,8 @@ const GameScreen = () => {
 
   const flipsRef = useRef(
     Array.from({ length: MAX_TRIES }, () =>
-      Array.from({ length: WORD_LENGTH }, () => new Animated.Value(0))
-    )
+      Array.from({ length: WORD_LENGTH }, () => new Animated.Value(0)),
+    ),
   );
   const isAnimatingRef = useRef(false);
 
@@ -491,7 +507,7 @@ const GameScreen = () => {
         duration: FLIP_DURATION,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: true,
-      })
+      }),
     );
 
     return new Promise((resolve) => {
@@ -598,7 +614,15 @@ const GameScreen = () => {
     requestAnimationFrame(() => inputRef.current?.clear?.());
   };
 
-  const renderCell = (row, col, char, status, isActive, isCurrentRow, onPress) => {
+  const renderCell = (
+    row,
+    col,
+    char,
+    status,
+    isActive,
+    isCurrentRow,
+    onPress,
+  ) => {
     const flipVal = flipsRef.current[row][col];
     const rotateX = flipVal.interpolate({
       inputRange: [0, 1],
@@ -640,9 +664,9 @@ const GameScreen = () => {
         rows.push(
           <View key={`row-${r}`} style={styles.row}>
             {Array.from({ length: WORD_LENGTH }).map((_, c) =>
-              renderCell(r, c, g[c] || "", attempt.evaluation[c], false, false)
+              renderCell(r, c, g[c] || "", attempt.evaluation[c], false, false),
             )}
-          </View>
+          </View>,
         );
         continue;
       }
@@ -662,10 +686,10 @@ const GameScreen = () => {
                 () => {
                   setSelectedCol(c);
                   focusInput();
-                }
+                },
               );
             })}
-          </View>
+          </View>,
         );
         continue;
       }
@@ -673,9 +697,9 @@ const GameScreen = () => {
       rows.push(
         <View key={`row-${r}`} style={styles.row}>
           {Array.from({ length: WORD_LENGTH }).map((_, c) =>
-            renderCell(r, c, "", null, false, false)
+            renderCell(r, c, "", null, false, false),
           )}
-        </View>
+        </View>,
       );
     }
 
@@ -730,25 +754,25 @@ const GameScreen = () => {
               >
                 <Text style={styles.pillBtnText}>Tutorial</Text>
               </Pressable>
-
-              
             </View>
 
             <View style={styles.scorePill}>
               <Text style={styles.scorePillLabel}>Pontuação</Text>
-              <Text style={styles.scorePillValue}>{scoreLoaded ? score : "—"}</Text>
+              <Text style={styles.scorePillValue}>
+                {scoreLoaded ? score : "—"}
+              </Text>
             </View>
             <Pressable
-                onPress={toggleTheme}
-                style={({ pressed }) => [
-                  styles.pillBtn,
-                  pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
-                ]}
-              >
-                <Text style={styles.pillBtnText}>
-                  {theme === "dark" ? "☀️" : "🌙"}
-                </Text>
-              </Pressable>
+              onPress={toggleTheme}
+              style={({ pressed }) => [
+                styles.pillBtn,
+                pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
+              ]}
+            >
+              <Text style={styles.pillBtnText}>
+                {theme === "dark" ? "☀️" : "🌙"}
+              </Text>
+            </Pressable>
           </View>
         </View>
 
@@ -802,31 +826,38 @@ const GameScreen = () => {
             style={({ pressed }) => [
               styles.primaryBtn,
               !canSubmit && { opacity: 0.5 },
-              pressed && canSubmit && { transform: [{ scale: 0.99 }], opacity: 0.95 },
+              pressed &&
+                canSubmit && { transform: [{ scale: 0.99 }], opacity: 0.95 },
             ]}
           >
             <Text style={styles.primaryBtnText}>Verificar</Text>
           </Pressable>
 
-          {!!message && <Text style={styles.message}>{message}</Text>}
-
           <Pressable
             onPress={resetRound}
-            style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.9 }]}
+            style={({ pressed }) => [
+              styles.secondaryBtn,
+              pressed && { opacity: 0.9 },
+            ]}
           >
             <Text style={styles.secondaryBtnText}>Reiniciar rodada</Text>
           </Pressable>
 
           <Pressable
             onPress={resetAll}
-            style={({ pressed }) => [styles.secondaryBtnDanger, pressed && { opacity: 0.9 }]}
+            style={({ pressed }) => [
+              styles.secondaryBtnDanger,
+              pressed && { opacity: 0.9 },
+            ]}
           >
             <Text style={styles.secondaryBtnText}>Zerar pontuação</Text>
           </Pressable>
         </View>
 
         <Text style={styles.footer}>
-          {items.length ? `${items.length} palavras no banco` : "Sem palavras no banco"}
+          {items.length
+            ? `${items.length} palavras no banco`
+            : "Sem palavras no banco"}
         </Text>
         <Text style={styles.kicker}>By: @Patrikybrito_Dev</Text>
       </ScrollView>
@@ -841,18 +872,30 @@ const GameScreen = () => {
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>Tutorial</Text>
 
-            <Text style={styles.modalText}>Digite uma palavra de 5 letras.</Text>
-            <Text style={styles.modalText}>🟢 Verde = letra correta na posição correta.</Text>
-            <Text style={styles.modalText}>🟡 Amarelo = letra existe, mas em outra posição.</Text>
-            <Text style={styles.modalText}>⚪ Cinza = letra não existe na palavra.</Text>
+            <Text style={styles.modalText}>
+              Digite uma palavra de 5 letras.
+            </Text>
+            <Text style={styles.modalText}>
+              🟢 Verde = letra correta na posição correta.
+            </Text>
+            <Text style={styles.modalText}>
+              🟡 Amarelo = letra existe, mas em outra posição.
+            </Text>
+            <Text style={styles.modalText}>
+              ⚪ Cinza = letra não existe na palavra.
+            </Text>
 
             <Text style={styles.note}>
-              Os acentos são preenchidos automaticamente, e não são considerados nas dicas.
+              Os acentos são preenchidos automaticamente, e não são considerados
+              nas dicas.
             </Text>
 
             <Pressable
               onPress={() => setShowTutorial(false)}
-              style={({ pressed }) => [styles.modalCloseBtn, pressed && { opacity: 0.9 }]}
+              style={({ pressed }) => [
+                styles.modalCloseBtn,
+                pressed && { opacity: 0.9 },
+              ]}
             >
               <Text style={styles.modalCloseText}>Fechar</Text>
             </Pressable>
