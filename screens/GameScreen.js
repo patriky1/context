@@ -14,7 +14,6 @@ import {
   Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import wordsData from "../assets/words.json";
 
 const normalize = (s) =>
@@ -28,12 +27,69 @@ const normalize = (s) =>
 const WORD_LENGTH = 5;
 const MAX_TRIES = 6;
 
-// ✅ animação mais lenta
 const FLIP_DURATION = 650;
 const FLIP_STAGGER = 130;
 
-// ✅ chave do storage
 const SCORE_KEY = "@adivinhe_a_palavra:score:v1";
+
+const THEMES = {
+  dark: {
+    screenBg: "#0B1220",
+    cardBg: "#111A2E",
+    borderSoft: "rgba(255,255,255,0.06)",
+    borderSofter: "rgba(255,255,255,0.08)",
+    borderBtn: "rgba(255,255,255,0.10)",
+    text: "#F9FAFB",
+    textMuted: "rgba(203,213,225,0.7)",
+    textMuted2: "rgba(203,213,225,0.85)",
+    chipBg: "rgba(147, 197, 253, 0.12)",
+    chipBorder: "rgba(147, 197, 253, 0.25)",
+    cellBg: "rgba(255,255,255,0.04)",
+    cellBorder: "rgba(255,255,255,0.14)",
+    cellActiveBorder: "rgba(147, 197, 253, 0.70)",
+    absentBg: "rgba(148, 163, 184, 0.14)",
+    absentBorder: "rgba(148, 163, 184, 0.22)",
+    correctBg: "rgba(16, 185, 129, 0.35)",
+    correctBorder: "rgba(16, 185, 129, 0.55)",
+    presentBg: "rgba(245, 158, 11, 0.35)",
+    presentBorder: "rgba(245, 158, 11, 0.55)",
+    primary: "#3B82F6",
+    dangerBg: "rgba(239, 68, 68, 0.10)",
+    dangerBorder: "rgba(239, 68, 68, 0.25)",
+    pillBg: "rgba(255,255,255,0.06)",
+    pillBorder: "rgba(255,255,255,0.12)",
+    overlay: "rgba(0,0,0,0.55)",
+    kicker: "#93C5FD",
+  },
+  light: {
+    screenBg: "#F8FAFC",
+    cardBg: "#FFFFFF",
+    borderSoft: "rgba(2,6,23,0.08)",
+    borderSofter: "rgba(2,6,23,0.10)",
+    borderBtn: "rgba(2,6,23,0.12)",
+    text: "#0F172A",
+    textMuted: "rgba(15,23,42,0.65)",
+    textMuted2: "rgba(15,23,42,0.75)",
+    chipBg: "rgba(59, 130, 246, 0.12)",
+    chipBorder: "rgba(59, 130, 246, 0.22)",
+    cellBg: "rgba(2,6,23,0.04)",
+    cellBorder: "rgba(2,6,23,0.14)",
+    cellActiveBorder: "rgba(59, 130, 246, 0.55)",
+    absentBg: "rgba(100, 116, 139, 0.14)",
+    absentBorder: "rgba(100, 116, 139, 0.22)",
+    correctBg: "rgba(16, 185, 129, 0.30)",
+    correctBorder: "rgba(16, 185, 129, 0.45)",
+    presentBg: "rgba(245, 158, 11, 0.30)",
+    presentBorder: "rgba(245, 158, 11, 0.45)",
+    primary: "#2563EB",
+    dangerBg: "rgba(239, 68, 68, 0.10)",
+    dangerBorder: "rgba(239, 68, 68, 0.20)",
+    pillBg: "rgba(2,6,23,0.04)",
+    pillBorder: "rgba(2,6,23,0.10)",
+    overlay: "rgba(2,6,23,0.55)",
+    kicker: "#2563EB",
+  },
+};
 
 function buildEvaluation(guessRaw, answerRaw) {
   const guess = normalize(guessRaw);
@@ -44,7 +100,6 @@ function buildEvaluation(guessRaw, answerRaw) {
 
   const result = Array(WORD_LENGTH).fill("absent");
 
-  // 1) corretas + pool restante
   const remaining = new Map();
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (g[i] === a[i]) {
@@ -54,7 +109,6 @@ function buildEvaluation(guessRaw, answerRaw) {
     }
   }
 
-  // 2) presentes (amarelo) respeitando repetidas
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (result[i] === "correct") continue;
     const ch = g[i];
@@ -90,40 +144,259 @@ function buildLetterHint(guessRaw, answerRaw, evaluation) {
   return `A letra ${letter} não faz parte da palavra.`;
 }
 
+const createStyles = (t) =>
+  StyleSheet.create({
+    screen: { flex: 1, backgroundColor: t.screenBg },
+    container: {
+      paddingHorizontal: 20,
+      paddingTop: 70,
+      paddingBottom: 24,
+      flexGrow: 1,
+    },
+    header: { marginBottom: 18 },
+    title: {
+      color: t.text,
+      fontSize: 28,
+      fontWeight: "800",
+      alignSelf: "center",
+    },
+    kicker: {
+      color: t.kicker,
+      fontSize: 12,
+      letterSpacing: 1.2,
+      textTransform: "uppercase",
+      marginBottom: 6,
+      textAlign: "center",
+    },
+    tutorialRow: {
+      marginTop: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 10,
+    },
+    rightHeaderGroup: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+    },
+    pillBtn: {
+      backgroundColor: t.pillBg,
+      borderWidth: 1,
+      borderColor: t.pillBorder,
+      paddingVertical: 8,
+      paddingHorizontal: 14,
+      borderRadius: 999,
+      alignSelf: "flex-start",
+    },
+    pillBtnText: {
+      color: t.text,
+      fontSize: 13,
+      fontWeight: "800",
+      letterSpacing: 0.6,
+      textTransform: "uppercase",
+    },
+    scorePill: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      backgroundColor: t.pillBg,
+      borderWidth: 1,
+      borderColor: t.pillBorder,
+      paddingVertical: 8,
+      paddingHorizontal: 12,
+      borderRadius: 999,
+    },
+    scorePillLabel: {
+      color: t.textMuted2,
+      fontSize: 12,
+      fontWeight: "800",
+      letterSpacing: 0.6,
+      textTransform: "uppercase",
+    },
+    scorePillValue: {
+      color: t.text,
+      fontSize: 14,
+      fontWeight: "900",
+    },
+    card: {
+      backgroundColor: t.cardBg,
+      borderRadius: 18,
+      padding: 18,
+      borderWidth: 1,
+      borderColor: t.borderSoft,
+      shadowColor: "#000",
+      shadowOpacity: Platform.OS === "android" ? 0.12 : 0.18,
+      shadowRadius: 14,
+      shadowOffset: { width: 0, height: 8 },
+      elevation: 3,
+    },
+    hintRow: { marginBottom: 14 },
+    hintHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      marginBottom: 8,
+    },
+    hintBtn: {
+      paddingVertical: 8,
+      paddingHorizontal: 12,
+      borderRadius: 999,
+      backgroundColor: t.pillBg,
+      borderWidth: 1,
+      borderColor: t.borderBtn,
+    },
+    hintBtnText: {
+      color: t.text,
+      fontSize: 12,
+      fontWeight: "800",
+      letterSpacing: 0.6,
+      textTransform: "uppercase",
+    },
+    hintChip: {
+      alignSelf: "flex-start",
+      backgroundColor: t.chipBg,
+      borderWidth: 1,
+      borderColor: t.chipBorder,
+      paddingVertical: 8,
+      paddingHorizontal: 12,
+      borderRadius: 999,
+    },
+    hintText: { color: t.text, fontSize: 14, fontWeight: "600" },
+    board: { marginTop: 6, marginBottom: 14 },
+    row: { flexDirection: "row", gap: 10, marginBottom: 10 },
+    cell: {
+      flex: 1,
+      height: 54,
+      borderRadius: 10,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: t.cellBg,
+      borderWidth: 1,
+      borderColor: t.cellBorder,
+      backfaceVisibility: "hidden",
+    },
+    cellActive: { borderColor: t.cellActiveBorder },
+    cellCorrect: { backgroundColor: t.correctBg, borderColor: t.correctBorder },
+    cellPresent: { backgroundColor: t.presentBg, borderColor: t.presentBorder },
+    cellAbsent: { backgroundColor: t.absentBg, borderColor: t.absentBorder },
+    cellText: {
+      color: t.text,
+      fontSize: 20,
+      fontWeight: "800",
+      letterSpacing: 1,
+    },
+    hiddenInput: { position: "absolute", opacity: 0, height: 1, width: 1 },
+    primaryBtn: {
+      backgroundColor: t.primary,
+      paddingVertical: 12,
+      borderRadius: 12,
+      alignItems: "center",
+      marginBottom: 10,
+    },
+    primaryBtnText: { color: "#FFFFFF", fontSize: 16, fontWeight: "700" },
+    message: {
+      color: t.text,
+      fontSize: 16,
+      lineHeight: 22,
+      marginTop: 6,
+      marginBottom: 6,
+    },
+    note: {
+      color: t.textMuted,
+      fontSize: 12,
+      lineHeight: 18,
+      marginTop: 4,
+      marginBottom: 12,
+    },
+    secondaryBtn: {
+      backgroundColor: t.pillBg,
+      borderWidth: 1,
+      borderColor: t.borderBtn,
+      paddingVertical: 12,
+      borderRadius: 12,
+      alignItems: "center",
+      marginBottom: 10,
+    },
+    secondaryBtnDanger: {
+      backgroundColor: t.dangerBg,
+      borderWidth: 1,
+      borderColor: t.dangerBorder,
+      paddingVertical: 12,
+      borderRadius: 12,
+      alignItems: "center",
+    },
+    secondaryBtnText: { color: t.text, fontSize: 15, fontWeight: "700" },
+    footer: {
+      color: t.textMuted,
+      textAlign: "center",
+      marginTop: 12,
+      fontSize: 12,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: t.overlay,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+    },
+    modalCard: {
+      width: "100%",
+      maxWidth: 360,
+      backgroundColor: t.cardBg,
+      borderRadius: 18,
+      padding: 18,
+      borderWidth: 1,
+      borderColor: t.borderSofter,
+    },
+    modalTitle: {
+      color: t.text,
+      fontSize: 20,
+      fontWeight: "800",
+      marginBottom: 12,
+    },
+    modalText: {
+      color: t.text,
+      fontSize: 14,
+      lineHeight: 22,
+      marginBottom: 8,
+    },
+    modalCloseBtn: {
+      marginTop: 10,
+      backgroundColor: t.primary,
+      paddingVertical: 12,
+      borderRadius: 12,
+      alignItems: "center",
+    },
+    modalCloseText: { color: "#fff", fontSize: 15, fontWeight: "700" },
+  });
+
 const GameScreen = () => {
   const items = useMemo(() => {
     const list = wordsData?.items ?? [];
     return Array.isArray(list) ? list : [];
   }, []);
 
+  const [theme, setTheme] = useState("dark");
+  const t = THEMES[theme] ?? THEMES.dark;
+  const styles = useMemo(() => createStyles(t), [t]);
+
   const inputRef = useRef(null);
 
   const [current, setCurrent] = useState(null);
-
-  // ✅ Agora cada célula é independente
-  const [currentLetters, setCurrentLetters] = useState(
-    Array(WORD_LENGTH).fill("")
-  );
+  const [currentLetters, setCurrentLetters] = useState(Array(WORD_LENGTH).fill(""));
   const [selectedCol, setSelectedCol] = useState(0);
 
-  // string derivada (para submit e validações)
-  const currentGuess = useMemo(() => currentLetters.join(""), [currentLetters]);
-
-  const [attempts, setAttempts] = useState([]); // [{ guessRaw, evaluation }]
+  const [attempts, setAttempts] = useState([]);
   const [message, setMessage] = useState("");
   const [done, setDone] = useState(false);
 
-  // ✅ dica controlada por botão
   const [showHint, setShowHint] = useState(false);
-
-  // ✅ tutorial em modal
   const [showTutorial, setShowTutorial] = useState(false);
 
-  // ✅ pontuação persistida
   const [score, setScore] = useState(0);
   const [scoreLoaded, setScoreLoaded] = useState(false);
 
-  // ===== animação de flip (giro) por célula =====
   const flipsRef = useRef(
     Array.from({ length: MAX_TRIES }, () =>
       Array.from({ length: WORD_LENGTH }, () => new Animated.Value(0))
@@ -131,7 +404,6 @@ const GameScreen = () => {
   );
   const isAnimatingRef = useRef(false);
 
-  // ✅ carrega pontuação ao abrir a tela
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -140,7 +412,6 @@ const GameScreen = () => {
         const n = raw != null ? Number(raw) : 0;
         if (alive) setScore(Number.isFinite(n) ? n : 0);
       } catch {
-        // se falhar, fica 0
       } finally {
         if (alive) setScoreLoaded(true);
       }
@@ -150,7 +421,6 @@ const GameScreen = () => {
     };
   }, []);
 
-  // ✅ salva pontuação sempre que mudar (após carregar o valor inicial)
   useEffect(() => {
     if (!scoreLoaded) return;
     AsyncStorage.setItem(SCORE_KEY, String(score)).catch(() => {});
@@ -171,7 +441,6 @@ const GameScreen = () => {
     isAnimatingRef.current = false;
   }, []);
 
-  // ✅ resetRound NÃO zera score (score é do "jogo")
   const resetRound = useCallback(() => {
     const next = pickRandomItem();
     setCurrent(next);
@@ -185,7 +454,6 @@ const GameScreen = () => {
     Keyboard.dismiss();
   }, [pickRandomItem, resetAnimations]);
 
-  // ✅ reset geral (zera pontuação também)
   const resetAll = useCallback(async () => {
     setScore(0);
     try {
@@ -232,10 +500,7 @@ const GameScreen = () => {
   }, []);
 
   const setCell = useCallback((index, value) => {
-    const letter = (value || "")
-      .replace(/[^a-zA-ZÀ-ÿ]/g, "")
-      .slice(-1); // garante 1 char
-
+    const letter = (value || "").replace(/[^a-zA-ZÀ-ÿ]/g, "").slice(-1);
     if (!letter) return;
 
     setCurrentLetters((prev) => {
@@ -244,10 +509,7 @@ const GameScreen = () => {
       return next;
     });
 
-    // avança coluna (ou mantém última)
     setSelectedCol(Math.min(index + 1, WORD_LENGTH - 1));
-
-    // mantém input vazio pra disparar onChange sempre
     requestAnimationFrame(() => inputRef.current?.clear?.());
   }, []);
 
@@ -255,13 +517,11 @@ const GameScreen = () => {
     setCurrentLetters((prev) => {
       const next = [...prev];
 
-      // se célula atual tem letra, apaga
       if (next[selectedCol]) {
         next[selectedCol] = "";
         return next;
       }
 
-      // se estiver vazia, volta e apaga a anterior
       const back = Math.max(0, selectedCol - 1);
       next[back] = "";
       setSelectedCol(back);
@@ -294,7 +554,6 @@ const GameScreen = () => {
 
     const rowIndex = attempts.length;
 
-    // roda a animação de flip ANTES de registrar o resultado visual
     Keyboard.dismiss();
     await runFlipForRow(rowIndex);
 
@@ -307,10 +566,7 @@ const GameScreen = () => {
     if (isWin) {
       setDone(true);
       setMessage("Parabéns, você acertou!");
-
-      // ✅ soma 1 ponto por acerto (e será persistido pelo useEffect)
       setScore((s) => s + 1);
-
       setTimeout(() => {
         resetRound();
       }, 900);
@@ -320,7 +576,6 @@ const GameScreen = () => {
     const hint = buildLetterHint(raw, answerWord, evaluation);
     setMessage(hint);
 
-    // acabou as tentativas? reinicia automaticamente
     if (newAttempts.length >= MAX_TRIES) {
       setDone(true);
       setMessage(`Fim de jogo! A palavra era ${answerWord.toUpperCase()}.`);
@@ -330,22 +585,12 @@ const GameScreen = () => {
       return;
     }
 
-    // limpa linha atual
     setCurrentLetters(Array(WORD_LENGTH).fill(""));
     setSelectedCol(0);
     requestAnimationFrame(() => inputRef.current?.clear?.());
   };
 
-  // ✅ key única por célula (resolve warning)
-  const renderCell = (
-    row,
-    col,
-    char,
-    status,
-    isActive,
-    isCurrentRow,
-    onPress
-  ) => {
+  const renderCell = (row, col, char, status, isActive, isCurrentRow, onPress) => {
     const flipVal = flipsRef.current[row][col];
     const rotateX = flipVal.interpolate({
       inputRange: [0, 1],
@@ -398,7 +643,7 @@ const GameScreen = () => {
         rows.push(
           <View key={`row-${r}`} style={styles.row}>
             {Array.from({ length: WORD_LENGTH }).map((_, c) => {
-              const isActive = c === selectedCol; // cursor
+              const isActive = c === selectedCol;
               return renderCell(
                 r,
                 c,
@@ -429,6 +674,10 @@ const GameScreen = () => {
     return rows;
   };
 
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  }, []);
+
   return (
     <KeyboardAvoidingView
       style={styles.screen}
@@ -443,35 +692,50 @@ const GameScreen = () => {
         <View style={styles.header}>
           <Text style={styles.title}>CONTEXT</Text>
 
-          {/* ✅ Tutorial + Pontuação (lado a lado, à direita) */}
           <View style={styles.tutorialRow}>
-            <Pressable
-              onPress={() => setShowTutorial(true)}
-              style={({ pressed }) => [
-                styles.tutorialBtn,
-                pressed && {
-                  opacity: 0.9,
-                  transform: [{ scale: 0.99 }],
-                },
-              ]}
-            >
-              <Text style={styles.tutorialBtnText}>Tutorial</Text>
-            </Pressable>
+            
+
+            <View style={styles.rightHeaderGroup}>
+              <Pressable
+                onPress={() => setShowTutorial(true)}
+                style={({ pressed }) => [
+                  styles.pillBtn,
+                  pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
+                ]}
+              >
+                <Text style={styles.pillBtnText}>Tutorial</Text>
+              </Pressable>
+
+              
+            </View>
 
             <View style={styles.scorePill}>
               <Text style={styles.scorePillLabel}>Pontuação</Text>
-              <Text style={styles.scorePillValue}>
-                {scoreLoaded ? score : "—"}
-              </Text>
+              <Text style={styles.scorePillValue}>{scoreLoaded ? score : "—"}</Text>
             </View>
+
+            <Pressable
+                onPress={toggleTheme}
+                style={({ pressed }) => [
+                  styles.pillBtn,
+                  pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
+                  {
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: "right", },
+                ]}
+              >
+                <Text style={styles.pillBtnText}>
+                  {theme === "dark" ? "☀️" : "🌙"}
+                </Text>
+              </Pressable>
+
           </View>
         </View>
 
         <View style={styles.card}>
-          {/* ✅ Dica com botão */}
           <View style={styles.hintRow}>
             <View style={styles.hintHeader}>
-
               <Pressable
                 onPress={() => setShowHint((v) => !v)}
                 style={({ pressed }) => [
@@ -494,12 +758,10 @@ const GameScreen = () => {
             )}
           </View>
 
-          {/* Board: tocar foca o input */}
           <Pressable onPress={focusInput} style={styles.board}>
             {renderBoard()}
           </Pressable>
 
-          {/* Input invisível */}
           <TextInput
             ref={inputRef}
             value={""}
@@ -521,10 +783,7 @@ const GameScreen = () => {
             style={({ pressed }) => [
               styles.primaryBtn,
               !canSubmit && { opacity: 0.5 },
-              pressed && canSubmit && {
-                transform: [{ scale: 0.99 }],
-                opacity: 0.95,
-              },
+              pressed && canSubmit && { transform: [{ scale: 0.99 }], opacity: 0.95 },
             ]}
           >
             <Text style={styles.primaryBtnText}>Verificar</Text>
@@ -532,39 +791,27 @@ const GameScreen = () => {
 
           {!!message && <Text style={styles.message}>{message}</Text>}
 
-          
-
           <Pressable
             onPress={resetRound}
-            style={({ pressed }) => [
-              styles.secondaryBtn,
-              pressed && { opacity: 0.9 },
-            ]}
+            style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.9 }]}
           >
             <Text style={styles.secondaryBtnText}>Reiniciar rodada</Text>
           </Pressable>
 
           <Pressable
             onPress={resetAll}
-            style={({ pressed }) => [
-              styles.secondaryBtnDanger,
-              pressed && { opacity: 0.9 },
-            ]}
+            style={({ pressed }) => [styles.secondaryBtnDanger, pressed && { opacity: 0.9 }]}
           >
             <Text style={styles.secondaryBtnText}>Zerar pontuação</Text>
           </Pressable>
         </View>
 
         <Text style={styles.footer}>
-          {items.length
-            ? `${items.length} palavras no banco`
-            : "Sem palavras no banco"}
+          {items.length ? `${items.length} palavras no banco` : "Sem palavras no banco"}
         </Text>
-          <Text style={styles.kicker}>By: @Patrikybrito_Dev</Text>
-
+        <Text style={styles.kicker}>By: @Patrikybrito_Dev</Text>
       </ScrollView>
 
-      {/* ✅ Modal do Tutorial */}
       <Modal
         visible={showTutorial}
         transparent
@@ -575,30 +822,18 @@ const GameScreen = () => {
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>Tutorial</Text>
 
-            <Text style={styles.modalText}>
-              Digite uma palavra de 5 letras.
-            </Text>
-            <Text style={styles.modalText}>
-              🟢 Verde = letra correta na posição correta.
-            </Text>
-            <Text style={styles.modalText}>
-              🟡 Amarelo = letra existe, mas em outra posição.
-            </Text>
-            <Text style={styles.modalText}>
-              ⚪ Cinza = letra não existe na palavra.
-            </Text>
+            <Text style={styles.modalText}>Digite uma palavra de 5 letras.</Text>
+            <Text style={styles.modalText}>🟢 Verde = letra correta na posição correta.</Text>
+            <Text style={styles.modalText}>🟡 Amarelo = letra existe, mas em outra posição.</Text>
+            <Text style={styles.modalText}>⚪ Cinza = letra não existe na palavra.</Text>
 
             <Text style={styles.note}>
-            Os acentos são preenchidos automaticamente, e não são considerados
-            nas dicas.
-          </Text>
+              Os acentos são preenchidos automaticamente, e não são considerados nas dicas.
+            </Text>
 
             <Pressable
               onPress={() => setShowTutorial(false)}
-              style={({ pressed }) => [
-                styles.modalCloseBtn,
-                pressed && { opacity: 0.9 },
-              ]}
+              style={({ pressed }) => [styles.modalCloseBtn, pressed && { opacity: 0.9 }]}
             >
               <Text style={styles.modalCloseText}>Fechar</Text>
             </Pressable>
@@ -608,264 +843,5 @@ const GameScreen = () => {
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#0B1220" },
-
-  container: {
-    paddingHorizontal: 20,
-    paddingTop: 70,
-    paddingBottom: 24,
-    flexGrow: 1,
-  },
-
-  header: { marginBottom: 18 },
-  kicker: {
-    color: "#93C5FD",
-    fontSize: 12,
-    letterSpacing: 1.2,
-    textTransform: "uppercase",
-    marginBottom: 6,
-    textAlign: "center",
-  },
-  title: { color: "#F9FAFB", 
-    fontSize: 28, 
-    fontWeight: "800",
-  alignSelf: "center",
- },
-
-
-  tutorialRow: {
-    marginTop: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 10,
-  },
-  tutorialBtn: {
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.12)",
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 999,
-    alignSelf: "flex-start",
-  },
-  tutorialBtnText: {
-    color: "#E5E7EB",
-    fontSize: 13,
-    fontWeight: "700",
-  },
-
-  scorePill: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.12)",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-  },
-  scorePillLabel: {
-    color: "rgba(203,213,225,0.85)",
-    fontSize: 12,
-    fontWeight: "800",
-    letterSpacing: 0.6,
-    textTransform: "uppercase",
-  },
-  scorePillValue: {
-    color: "#F9FAFB",
-    fontSize: 14,
-    fontWeight: "900",
-  },
-
-  card: {
-    backgroundColor: "#111A2E",
-    borderRadius: 18,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.06)",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 3,
-  },
-
-  hintRow: { marginBottom: 14 },
-  hintHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  hintLabel: { color: "#9CA3AF", fontSize: 12 },
-  hintBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-  },
-  hintBtnText: {
-    color: "#E5E7EB",
-    fontSize: 12,
-    fontWeight: "800",
-    letterSpacing: 0.6,
-    textTransform: "uppercase",
-  },
-
-  hintChip: {
-    alignSelf: "flex-start",
-    backgroundColor: "rgba(147, 197, 253, 0.12)",
-    borderWidth: 1,
-    borderColor: "rgba(147, 197, 253, 0.25)",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-  },
-  hintText: { color: "#E5E7EB", fontSize: 14, fontWeight: "600" },
-
-  board: { marginTop: 6, marginBottom: 14 },
-  row: {
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 10,
-  },
-  cell: {
-    flex: 1,
-    height: 54,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(255,255,255,0.04)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.14)",
-    backfaceVisibility: "hidden",
-  },
-  cellActive: {
-    borderColor: "rgba(147, 197, 253, 0.70)",
-  },
-  cellCorrect: {
-    backgroundColor: "rgba(16, 185, 129, 0.35)",
-    borderColor: "rgba(16, 185, 129, 0.55)",
-  },
-  cellPresent: {
-    backgroundColor: "rgba(245, 158, 11, 0.35)",
-    borderColor: "rgba(245, 158, 11, 0.55)",
-  },
-  cellAbsent: {
-    backgroundColor: "rgba(148, 163, 184, 0.14)",
-    borderColor: "rgba(148, 163, 184, 0.22)",
-  },
-  cellText: {
-    color: "#F9FAFB",
-    fontSize: 20,
-    fontWeight: "800",
-    letterSpacing: 1,
-  },
-
-  hiddenInput: {
-    position: "absolute",
-    opacity: 0,
-    height: 1,
-    width: 1,
-  },
-
-  primaryBtn: {
-    backgroundColor: "#3B82F6",
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  primaryBtnText: { color: "#FFFFFF", fontSize: 16, fontWeight: "700" },
-
-  message: {
-    color: "#E5E7EB",
-    fontSize: 16,
-    lineHeight: 22,
-    marginTop: 6,
-    marginBottom: 6,
-  },
-
-  note: {
-    color: "rgba(203,213,225,0.7)",
-    fontSize: 12,
-    lineHeight: 18,
-    marginTop: 4,
-    marginBottom: 12,
-  },
-
-  secondaryBtn: {
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  secondaryBtnDanger: {
-    backgroundColor: "rgba(239, 68, 68, 0.10)",
-    borderWidth: 1,
-    borderColor: "rgba(239, 68, 68, 0.25)",
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  secondaryBtnText: { color: "#E5E7EB", fontSize: 15, fontWeight: "700" },
-
-  footer: {
-    color: "rgba(203,213,225,0.7)",
-    textAlign: "center",
-    marginTop: 12,
-    fontSize: 12,
-  },
-
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.55)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  modalCard: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: "#111A2E",
-    borderRadius: 18,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-  },
-  modalTitle: {
-    color: "#F9FAFB",
-    fontSize: 20,
-    fontWeight: "800",
-    marginBottom: 12,
-  },
-  modalText: {
-    color: "#E5E7EB",
-    fontSize: 14,
-    lineHeight: 22,
-    marginBottom: 8,
-  },
-  modalCloseBtn: {
-    marginTop: 10,
-    backgroundColor: "#3B82F6",
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  modalCloseText: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "700",
-  },
-});
 
 export default GameScreen;
