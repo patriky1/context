@@ -11,7 +11,9 @@ import {
   Animated,
   Easing,
   ScrollView,
+  Modal,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import wordsData from "../assets/words.json";
 
@@ -29,6 +31,9 @@ const MAX_TRIES = 6;
 // ✅ animação mais lenta
 const FLIP_DURATION = 650;
 const FLIP_STAGGER = 130;
+
+// ✅ chave do storage
+const SCORE_KEY = "@adivinhe_a_palavra:score:v1";
 
 function buildEvaluation(guessRaw, answerRaw) {
   const guess = normalize(guessRaw);
@@ -102,14 +107,21 @@ const GameScreen = () => {
   const [selectedCol, setSelectedCol] = useState(0);
 
   // string derivada (para submit e validações)
-  const currentGuess = useMemo(
-    () => currentLetters.join(""),
-    [currentLetters]
-  );
+  const currentGuess = useMemo(() => currentLetters.join(""), [currentLetters]);
 
   const [attempts, setAttempts] = useState([]); // [{ guessRaw, evaluation }]
   const [message, setMessage] = useState("");
   const [done, setDone] = useState(false);
+
+  // ✅ dica controlada por botão
+  const [showHint, setShowHint] = useState(false);
+
+  // ✅ tutorial em modal
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  // ✅ pontuação persistida
+  const [score, setScore] = useState(0);
+  const [scoreLoaded, setScoreLoaded] = useState(false);
 
   // ===== animação de flip (giro) por célula =====
   const flipsRef = useRef(
@@ -118,6 +130,31 @@ const GameScreen = () => {
     )
   );
   const isAnimatingRef = useRef(false);
+
+  // ✅ carrega pontuação ao abrir a tela
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const raw = await AsyncStorage.getItem(SCORE_KEY);
+        const n = raw != null ? Number(raw) : 0;
+        if (alive) setScore(Number.isFinite(n) ? n : 0);
+      } catch {
+        // se falhar, fica 0
+      } finally {
+        if (alive) setScoreLoaded(true);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // ✅ salva pontuação sempre que mudar (após carregar o valor inicial)
+  useEffect(() => {
+    if (!scoreLoaded) return;
+    AsyncStorage.setItem(SCORE_KEY, String(score)).catch(() => {});
+  }, [score, scoreLoaded]);
 
   const pickRandomItem = useCallback(() => {
     if (!items.length) return null;
@@ -134,6 +171,7 @@ const GameScreen = () => {
     isAnimatingRef.current = false;
   }, []);
 
+  // ✅ resetRound NÃO zera score (score é do "jogo")
   const resetRound = useCallback(() => {
     const next = pickRandomItem();
     setCurrent(next);
@@ -142,9 +180,19 @@ const GameScreen = () => {
     setSelectedCol(0);
     setMessage("");
     setDone(false);
+    setShowHint(false);
     resetAnimations();
     Keyboard.dismiss();
   }, [pickRandomItem, resetAnimations]);
+
+  // ✅ reset geral (zera pontuação também)
+  const resetAll = useCallback(async () => {
+    setScore(0);
+    try {
+      await AsyncStorage.setItem(SCORE_KEY, "0");
+    } catch {}
+    resetRound();
+  }, [resetRound]);
 
   useEffect(() => {
     resetRound();
@@ -259,6 +307,10 @@ const GameScreen = () => {
     if (isWin) {
       setDone(true);
       setMessage("Parabéns, você acertou!");
+
+      // ✅ soma 1 ponto por acerto (e será persistido pelo useEffect)
+      setScore((s) => s + 1);
+
       setTimeout(() => {
         resetRound();
       }, 900);
@@ -382,7 +434,6 @@ const GameScreen = () => {
       style={styles.screen}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      {/* ✅ Scroll na página inteira */}
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
@@ -390,22 +441,57 @@ const GameScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={styles.kicker}>By: @Patrikybrito_Dev</Text>
-          <Text style={styles.title}>Adivinhe a Palavra</Text>
-          <Text style={styles.subtitle}>
-            Digite uma palavra de 5 letras. Verde = posição correta, amarelo =
-            existe em outra posição, cinza = não existe.
-          </Text>
+          <Text style={styles.title}>CONTEXT</Text>
+
+          {/* ✅ Tutorial + Pontuação (lado a lado, à direita) */}
+          <View style={styles.tutorialRow}>
+            <Pressable
+              onPress={() => setShowTutorial(true)}
+              style={({ pressed }) => [
+                styles.tutorialBtn,
+                pressed && {
+                  opacity: 0.9,
+                  transform: [{ scale: 0.99 }],
+                },
+              ]}
+            >
+              <Text style={styles.tutorialBtnText}>Tutorial</Text>
+            </Pressable>
+
+            <View style={styles.scorePill}>
+              <Text style={styles.scorePillLabel}>Pontuação</Text>
+              <Text style={styles.scorePillValue}>
+                {scoreLoaded ? score : "—"}
+              </Text>
+            </View>
+          </View>
         </View>
 
         <View style={styles.card}>
+          {/* ✅ Dica com botão */}
           <View style={styles.hintRow}>
-            <Text style={styles.hintLabel}>Dica</Text>
-            <View style={styles.hintChip}>
-              <Text style={styles.hintText}>
-                {current?.hint ? current.hint : "Carregando..."}
-              </Text>
+            <View style={styles.hintHeader}>
+
+              <Pressable
+                onPress={() => setShowHint((v) => !v)}
+                style={({ pressed }) => [
+                  styles.hintBtn,
+                  pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
+                ]}
+              >
+                <Text style={styles.hintBtnText}>
+                  {showHint ? "Ocultar dica" : "Mostrar dica"}
+                </Text>
+              </Pressable>
             </View>
+
+            {showHint && (
+              <View style={styles.hintChip}>
+                <Text style={styles.hintText}>
+                  {current?.hint ? current.hint : "Carregando..."}
+                </Text>
+              </View>
+            )}
           </View>
 
           {/* Board: tocar foca o input */}
@@ -413,7 +499,7 @@ const GameScreen = () => {
             {renderBoard()}
           </Pressable>
 
-          {/* Input invisível: 1 letra por vez, cai na célula selecionada */}
+          {/* Input invisível */}
           <TextInput
             ref={inputRef}
             value={""}
@@ -446,10 +532,7 @@ const GameScreen = () => {
 
           {!!message && <Text style={styles.message}>{message}</Text>}
 
-          <Text style={styles.note}>
-            Os acentos são preenchidos automaticamente, e não são considerados
-            nas dicas.
-          </Text>
+          
 
           <Pressable
             onPress={resetRound}
@@ -458,14 +541,70 @@ const GameScreen = () => {
               pressed && { opacity: 0.9 },
             ]}
           >
-            <Text style={styles.secondaryBtnText}>Reiniciar agora</Text>
+            <Text style={styles.secondaryBtnText}>Reiniciar rodada</Text>
+          </Pressable>
+
+          <Pressable
+            onPress={resetAll}
+            style={({ pressed }) => [
+              styles.secondaryBtnDanger,
+              pressed && { opacity: 0.9 },
+            ]}
+          >
+            <Text style={styles.secondaryBtnText}>Zerar pontuação</Text>
           </Pressable>
         </View>
 
         <Text style={styles.footer}>
-          {items.length ? `${items.length} palavras no banco` : "Sem palavras no banco"}
+          {items.length
+            ? `${items.length} palavras no banco`
+            : "Sem palavras no banco"}
         </Text>
+          <Text style={styles.kicker}>By: @Patrikybrito_Dev</Text>
+
       </ScrollView>
+
+      {/* ✅ Modal do Tutorial */}
+      <Modal
+        visible={showTutorial}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowTutorial(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Tutorial</Text>
+
+            <Text style={styles.modalText}>
+              Digite uma palavra de 5 letras.
+            </Text>
+            <Text style={styles.modalText}>
+              🟢 Verde = letra correta na posição correta.
+            </Text>
+            <Text style={styles.modalText}>
+              🟡 Amarelo = letra existe, mas em outra posição.
+            </Text>
+            <Text style={styles.modalText}>
+              ⚪ Cinza = letra não existe na palavra.
+            </Text>
+
+            <Text style={styles.note}>
+            Os acentos são preenchidos automaticamente, e não são considerados
+            nas dicas.
+          </Text>
+
+            <Pressable
+              onPress={() => setShowTutorial(false)}
+              style={({ pressed }) => [
+                styles.modalCloseBtn,
+                pressed && { opacity: 0.9 },
+              ]}
+            >
+              <Text style={styles.modalCloseText}>Fechar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 };
@@ -487,9 +626,60 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
     textTransform: "uppercase",
     marginBottom: 6,
+    textAlign: "center",
   },
-  title: { color: "#F9FAFB", fontSize: 28, fontWeight: "800" },
-  subtitle: { color: "#CBD5E1", fontSize: 14, marginTop: 8, lineHeight: 20 },
+  title: { color: "#F9FAFB", 
+    fontSize: 28, 
+    fontWeight: "800",
+  alignSelf: "center",
+ },
+
+
+  tutorialRow: {
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+  tutorialBtn: {
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    alignSelf: "flex-start",
+  },
+  tutorialBtnText: {
+    color: "#E5E7EB",
+    fontSize: 13,
+    fontWeight: "700",
+  },
+
+  scorePill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+  },
+  scorePillLabel: {
+    color: "rgba(203,213,225,0.85)",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
+  },
+  scorePillValue: {
+    color: "#F9FAFB",
+    fontSize: 14,
+    fontWeight: "900",
+  },
 
   card: {
     backgroundColor: "#111A2E",
@@ -505,7 +695,29 @@ const styles = StyleSheet.create({
   },
 
   hintRow: { marginBottom: 14 },
-  hintLabel: { color: "#9CA3AF", fontSize: 12, marginBottom: 8 },
+  hintHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  hintLabel: { color: "#9CA3AF", fontSize: 12 },
+  hintBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+  },
+  hintBtnText: {
+    color: "#E5E7EB",
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
+  },
+
   hintChip: {
     alignSelf: "flex-start",
     backgroundColor: "rgba(147, 197, 253, 0.12)",
@@ -595,6 +807,15 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     alignItems: "center",
+    marginBottom: 10,
+  },
+  secondaryBtnDanger: {
+    backgroundColor: "rgba(239, 68, 68, 0.10)",
+    borderWidth: 1,
+    borderColor: "rgba(239, 68, 68, 0.25)",
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: "center",
   },
   secondaryBtnText: { color: "#E5E7EB", fontSize: 15, fontWeight: "700" },
 
@@ -603,6 +824,47 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 12,
     fontSize: 12,
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.55)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  modalCard: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: "#111A2E",
+    borderRadius: 18,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
+  },
+  modalTitle: {
+    color: "#F9FAFB",
+    fontSize: 20,
+    fontWeight: "800",
+    marginBottom: 12,
+  },
+  modalText: {
+    color: "#E5E7EB",
+    fontSize: 14,
+    lineHeight: 22,
+    marginBottom: 8,
+  },
+  modalCloseBtn: {
+    marginTop: 10,
+    backgroundColor: "#3B82F6",
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  modalCloseText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "700",
   },
 });
 
