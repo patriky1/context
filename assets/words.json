@@ -1913,6 +1913,15 @@
       ]
     },
     {
+    "word": "áureo",
+    "hint": "Dourado; brilhante como ouro; magnífico.",
+    "tags": [
+      "ouro",
+      "dourado",
+      "brilhante"
+    ]
+  },
+    {
       "word": "renda",
       "hint": "Dinheiro ganho; também tecido rendado.",
       "tags": [
@@ -2181,6 +2190,731 @@
         "festa",
         "ano"
       ]
+    },
+    {
+      "word": "sagaz",
+      "hint": "Pessoa astuta e perspicaz.",
+      "tags": ["astuto", "esperto", "intelig", "sabio"]
+    },
+    {
+      "word": "amago",
+      "hint": "Centro ou essência de algo.",
+      "tags": ["centro", "essenc", "nucleo", "fundam"]
+    },
+    {
+      "word": "termo",
+      "hint": "Palavra ou limite de tempo.",
+      "tags": ["palavr", "limite", "prazo", "fim"]
+    },
+    {
+      "word": "negro",
+      "hint": "Cor escura ou ausência de luz.",
+      "tags": ["preto", "escuro", "cor", "tonal"]
+    },
+    {
+      "word": "exito",
+      "hint": "Sucesso ou resultado positivo.",
+      "tags": ["sucesso", "vitoria", "bom", "result"]
+    },
+    {
+      "word": "mexer",
+      "hint": "Mover ou misturar algo.",
+      "tags": ["mover", "agitar", "mistur", "acao"]
+    },
+    {
+      "word": "senso",
+      "hint": "Percepção ou bom julgamento.",
+      "tags": ["percep", "juizo", "racioc", "mente"]
+    },
+    {
+      "word": "afeto",
+      "hint": "Sentimento de carinho ou amor.",
+      "tags": ["carinho", "amor", "emo", "sentim"]
+    },
+    {
+      "word": "algoz",
+      "hint": "Carrasco ou executor de pena.",
+      "tags": ["carrasc", "pena", "castigo", "torment"]
+    },
+    {
+      "word": "fazer",
+      "hint": "Criar ou realizar uma ação.",
+      "tags": ["criar", "realizar", "acao", "execut"]
+    },
+    {
+      "word": "plena",
+      "hint": "Completa ou em pleno estado.",
+      "tags": ["completa", "total", "cheia", "inteira"]
+    },
+    {
+      "word": "tenue",
+      "hint": "Fino, leve ou sutil.",
+      "tags": ["fino", "leve", "sutil", "delicad"]
+    },
+    {
+      "word": "assim",
+      "hint": "Dessa forma ou desse jeito.",
+      "tags": ["forma", "modo", "jeito", "maneira"]
+    },
+    {
+      "word": "mutua",
+      "hint": "Recíproca entre duas partes.",
+      "tags": ["recipro", "comum", "junto", "mutuo"]
+    },
+    {
+      "word": "sobre",
+      "hint": "Acima de ou a respeito de.",
+      "tags": ["acima", "respeito", "topo", "sobre"]
+    },
+    {
+      "word": "aquem",
+      "hint": "Abaixo ou aquém de um limite.",
+      "tags": ["abaixo", "menos", "inferior", "aquem"]
+    },
+    {
+      "word": "poder",
+      "hint": "Capacidade ou autoridade.",
+      "tags": ["capacid", "autorid", "forca", "poder"]
+    },
+    {
+      "word": "secao",
+      "hint": "Parte ou divisão de um todo.",
+      "tags": ["parte", "divisao", "setor", "grupo"]
+    },
+    {
+      "word": "vigor",
+      "hint": "Força física ou vitalidade.",
+      "tags": ["forca", "energia", "vital", "saude"]
+    },
+    {
+      "word": "sutil",
+      "hint": "Delicado ou difícil de notar.",
+      "tags": ["delicado", "fino", "perspi", "subtil"]
+    },
+    {
+      "word": "porem",
+      "hint": "Mas ou contudo (conjunção).",
+      "tags": ["mas", "contudo", "oposto", "porem"]
+    },
+    {
+      "word": "fosse",
+      "hint": "Forma do verbo ser no passado.",
+      "tags": ["verbo", "ser", "passado", "forma"]
+    },
+    {
+      "word": "cerne",
+      "hint": "Parte essencial ou núcleo.",
+      "tags": ["essenc", "nucleo", "centro", "cerne"]
+    },
+    {
+      "word": "ideia",
+      "hint": "Conceito ou pensamento na mente.",
+      "tags": ["pensam", "conceito", "mente", "ideia"]
+    },
+    {
+      "word": "sanar",
+      "hint": "Curar ou resolver um problema.",
+      "tags": ["curar", "resolver", "solucion", "sanar"]
+    },
+    {
+      "word": "audaz",
+      "hint": "Ousado e corajoso.",
+      "tags": ["ousado", "corajoso", "bravo", "audaz"]
+    },
+    {
+      "word": "moral",
+      "hint": "Relativo a princípios éticos.",
+      "tags": ["etica", "principio", "certo", "moral"]
+    },
+    {
+      "word": "inato",
+      "hint": "Presente desde o nascimento.",
+      "tags": ["natural", "nascido", "herdad", "inato"]
+    },
+    {
+      "word": "quica",
+      "hint": "Talvez ou possivelmente.",
+      "tags": ["talvez", "possivel", "duvida", "quiça"]
+    },
+    {
+      "word": "muito",
+      "hint": "Em grande quantidade ou grau.",
+      "tags": ["grande", "quantid", "bastante", "muito"]
+    },
+    {
+      "word": "desde",
+      "hint": "A partir de um ponto no tempo.",
+      "tags": ["a partir", "inicio", "tempo", "desde"]
+    },
+    {
+      "word": "honra",
+      "hint": "Dignidade ou prestígio moral.",
+      "tags": ["dignid", "prestigio", "respeito", "honra"]
+    },
+    {
+      "word": "torpe",
+      "hint": "Vil ou moralmente baixo.",
+      "tags": ["vil", "vergonh", "ruim", "torpe"]
+    },
+    {
+      "word": "razao",
+      "hint": "Motivo lógico ou inteligência.",
+      "tags": ["motivo", "logica", "intelig", "razao"]
+    },
+    {
+      "word": "egide",
+      "hint": "Proteção ou escudo simbólico.",
+      "tags": ["protecao", "escudo", "amparo", "egide"]
+    },
+    {
+      "word": "etnia",
+      "hint": "Grupo com origem cultural comum.",
+      "tags": ["grupo", "origem", "cultura", "etnia"]
+    },
+    {
+      "word": "futil",
+      "hint": "Sem importância ou superficial.",
+      "tags": ["superfic", "inutil", "leve", "futil"]
+    },
+    {
+      "word": "anexo",
+      "hint": "Anexado ou documento adicional.",
+      "tags": ["anexado", "adicional", "document", "anexo"]
+    },
+    {
+      "word": "dengo",
+      "hint": "Mimo ou carinho excessivo.",
+      "tags": ["mimo", "carinho", "afeto", "dengo"]
+    },
+    {
+      "word": "tange",
+      "hint": "Toca ou diz respeito a algo.",
+      "tags": ["toca", "respeito", "diz", "tange"]
+    },
+    {
+      "word": "haver",
+      "hint": "Existir ou possuir algo.",
+      "tags": ["existir", "possuir", "ter", "haver"]
+    },
+    {
+      "word": "lapso",
+      "hint": "Erro ou pequeno intervalo.",
+      "tags": ["erro", "interval", "falha", "lapso"]
+    },
+    {
+      "word": "entao",
+      "hint": "Nesse momento ou portanto.",
+      "tags": ["momento", "portanto", "entao", "logo"]
+    },
+    {
+      "word": "expor",
+      "hint": "Mostrar ou explicar publicamente.",
+      "tags": ["mostrar", "explicar", "apresent", "expor"]
+    },
+    {
+      "word": "seara",
+      "hint": "Campo de cereais ou área de atuação.",
+      "tags": ["campo", "cereais", "area", "seara"]
+    },
+    {
+      "word": "saber",
+      "hint": "Conhecer ou ter conhecimento.",
+      "tags": ["conhecer", "conhec", "saber", "saber"]
+    },
+    {
+      "word": "habil",
+      "hint": "Habilidoso ou competente.",
+      "tags": ["compet", "habilid", "capaz", "habil"]
+    },
+    {
+      "word": "mutuo",
+      "hint": "Recíproco ou mútuo.",
+      "tags": ["recipro", "comum", "junto", "mutuo"]
+    },
+    {
+      "word": "boçal",
+      "hint": "Rústico ou sem educação.",
+      "tags": ["rustico", "grosseiro", "rude", "bocal"]
+    },
+    {
+      "word": "abano",
+      "hint": "Objeto manual para fazer vento.",
+      "tags": ["vento", "mao", "fresco", "objeto"]
+    },
+    {
+      "word": "acaso",
+      "hint": "Evento que acontece por sorte.",
+      "tags": ["sorte", "aleat", "imprev", "acaso"]
+    },
+    {
+      "word": "acido",
+      "hint": "Substância química que pode corroer.",
+      "tags": ["quim", "ph", "corros", "liquido"]
+    },
+    {
+      "word": "adaga",
+      "hint": "Faca curta e afiada usada em combates.",
+      "tags": ["arma", "corta", "metal", "luta"]
+    },
+    {
+      "word": "afago",
+      "hint": "Carinho suave feito com a mão.",
+      "tags": ["carinho", "gesto", "afeto", "mao"]
+    },
+    {
+      "word": "agudo",
+      "hint": "Afiado ou som muito alto.",
+      "tags": ["afiad", "som", "dor", "intens"]
+    },
+    {
+      "word": "algas",
+      "hint": "Plantas verdes que crescem na água.",
+      "tags": ["agua", "planta", "mar", "verde"]
+    },
+    {
+      "word": "alhos",
+      "hint": "Tempero forte usado na cozinha (plural).",
+      "tags": ["tempero", "cozinha", "cheiro", "alho"]
+    },
+    {
+      "word": "almas",
+      "hint": "Espíritos das pessoas (plural).",
+      "tags": ["espirit", "vida", "pessoa", "alma"]
+    },
+    {
+      "word": "altar",
+      "hint": "Mesa sagrada dentro de igrejas.",
+      "tags": ["igreja", "relig", "sagrado", "mesa"]
+    },
+    {
+      "word": "ansia",
+      "hint": "Vontade intensa ou inquietação.",
+      "tags": ["desejo", "vontade", "emo", "forte"]
+    },
+    {
+      "word": "apito",
+      "hint": "Pequeno instrumento que faz som agudo.",
+      "tags": ["som", "juiz", "esporte", "sinal"]
+    },
+    {
+      "word": "arena",
+      "hint": "Local de lutas ou shows públicos.",
+      "tags": ["luta", "show", "publico", "lugar"]
+    },
+    {
+      "word": "atlas",
+      "hint": "Livro grande com mapas do mundo.",
+      "tags": ["mapa", "livro", "geo", "mundo"]
+    },
+    {
+      "word": "atomo",
+      "hint": "Menor parte da matéria.",
+      "tags": ["quim", "pequeno", "materia", "ciencia"]
+    },
+    {
+      "word": "baile",
+      "hint": "Festa onde se dança.",
+      "tags": ["danca", "festa", "musica", "lazer"]
+    },
+    {
+      "word": "banca",
+      "hint": "Mesa de vendedor ou banca de jornal.",
+      "tags": ["mesa", "venda", "rua", "jornal"]
+    },
+    {
+      "word": "banco",
+      "hint": "Lugar para sentar ou instituição de dinheiro.",
+      "tags": ["sentar", "dinhe", "parque", "financ"]
+    },
+    {
+      "word": "balde",
+      "hint": "Recipiente grande para carregar água.",
+      "tags": ["agua", "casa", "objeto", "limp"]
+    },
+    {
+      "word": "balao",
+      "hint": "Brinquedo inflável que voa.",
+      "tags": ["brinca", "ar", "festa", "voar"]
+    },
+    {
+      "word": "banha",
+      "hint": "Gordura usada na cozinha.",
+      "tags": ["gordura", "cozinha", "porco", "comida"]
+    },
+    {
+      "word": "barra",
+      "hint": "Peça longa e fina de metal ou chocolate.",
+      "tags": ["metal", "choco", "linha", "objeto"]
+    },
+    {
+      "word": "barro",
+      "hint": "Argila molhada usada em cerâmica.",
+      "tags": ["terra", "ceram", "molhado", "constr"]
+    },
+    {
+      "word": "batom",
+      "hint": "Maquiagem colorida para os lábios.",
+      "tags": ["boca", "maqui", "cor", "beleza"]
+    },
+    {
+      "word": "beijo",
+      "hint": "Ato de encostar os lábios em sinal de afeto.",
+      "tags": ["amor", "boca", "afeto", "gesto"]
+    },
+    {
+      "word": "berco",
+      "hint": "Cama pequena para bebê.",
+      "tags": ["bebe", "dormir", "casa", "madeira"]
+    },
+    {
+      "word": "bicho",
+      "hint": "Qualquer animal, especialmente pequeno.",
+      "tags": ["animal", "selva", "casa", "bicho"]
+    },
+    {
+      "word": "bispo",
+      "hint": "Cargo importante na igreja católica.",
+      "tags": ["igreja", "relig", "cargo", "bispo"]
+    },
+    {
+      "word": "bloco",
+      "hint": "Conjunto de folhas ou prédio grande.",
+      "tags": ["papel", "constr", "grupo", "notas"]
+    },
+    {
+      "word": "bolso",
+      "hint": "Parte da roupa para guardar objetos.",
+      "tags": ["roupa", "guardar", "dinhe", "bolsa"]
+    },
+    {
+      "word": "bomba",
+      "hint": "Dispositivo para água ou explosivo.",
+      "tags": ["agua", "explos", "motor", "objeto"]
+    },
+    {
+      "word": "burro",
+      "hint": "Animal forte usado em fazendas.",
+      "tags": ["animal", "fazenda", "carga", "burro"]
+    },
+    {
+      "word": "busca",
+      "hint": "Ato de procurar algo.",
+      "tags": ["procur", "acao", "encontr", "busca"]
+    },
+    {
+      "word": "cabos",
+      "hint": "Fios usados em eletricidade (plural).",
+      "tags": ["fio", "eletric", "conexao", "tecno"]
+    },
+    {
+      "word": "cacao",
+      "hint": "Semente usada para fazer chocolate.",
+      "tags": ["choco", "planta", "semente", "doce"]
+    },
+    {
+      "word": "cache",
+      "hint": "Memória temporária do computador.",
+      "tags": ["memoria", "pc", "rapido", "dados"]
+    },
+    {
+      "word": "cacho",
+      "hint": "Grupo de uvas ou fios de cabelo.",
+      "tags": ["uva", "cabelo", "grupo", "fruta"]
+    },
+    {
+      "word": "calma",
+      "hint": "Estado de tranquilidade e paz.",
+      "tags": ["paz", "tranquil", "humor", "calmo"]
+    },
+    {
+      "word": "canal",
+      "hint": "Via artificial para água ou TV.",
+      "tags": ["agua", "tv", "passagem", "rio"]
+    },
+    {
+      "word": "canoa",
+      "hint": "Barco pequeno movido a remo.",
+      "tags": ["barco", "remo", "rio", "agua"]
+    },
+    {
+      "word": "capas",
+      "hint": "Coberturas de livros ou proteção (plural).",
+      "tags": ["livro", "protecao", "capa", "objeto"]
+    },
+    {
+      "word": "capuz",
+      "hint": "Parte do casaco que cobre a cabeça.",
+      "tags": ["cabeca", "frio", "roupa", "capuz"]
+    },
+    {
+      "word": "carma",
+      "hint": "Destino baseado em ações passadas.",
+      "tags": ["destino", "acao", "vida", "relig"]
+    },
+    {
+      "word": "casca",
+      "hint": "Parte externa de frutas ou ovos.",
+      "tags": ["fruta", "externa", "ovo", "protec"]
+    },
+    {
+      "word": "cavar",
+      "hint": "Abrir buraco no chão com ferramenta.",
+      "tags": ["solo", "ferram", "acao", "terra"]
+    },
+    {
+      "word": "ceder",
+      "hint": "Desistir ou entregar algo.",
+      "tags": ["desist", "entregar", "acao", "ceder"]
+    },
+    {
+      "word": "celas",
+      "hint": "Quartos pequenos em prisões (plural).",
+      "tags": ["prisao", "quarto", "pequeno", "cela"]
+    },
+    {
+      "word": "censo",
+      "hint": "Contagem oficial da população.",
+      "tags": ["contagem", "populac", "governo", "dados"]
+    },
+    {
+      "word": "cerca",
+      "hint": "Barreira que delimita um terreno.",
+      "tags": ["barreira", "protecao", "limite", "cerca"]
+    },
+    {
+      "word": "cerco",
+      "hint": "Ação de rodear um lugar.",
+      "tags": ["cercar", "ataque", "militar", "cerco"]
+    },
+    {
+      "word": "clube",
+      "hint": "Grupo ou lugar de lazer e esportes.",
+      "tags": ["grupo", "lazer", "esporte", "clube"]
+    },
+    {
+      "word": "coifa",
+      "hint": "Aparelho de cozinha que suga fumaça.",
+      "tags": ["cozinha", "fumaça", "exaur", "objeto"]
+    },
+    {
+      "word": "colar",
+      "hint": "Joia para o pescoço ou grudar algo.",
+      "tags": ["pescoço", "joia", "grudar", "colar"]
+    },
+    {
+      "word": "colhe",
+      "hint": "Ato de pegar frutas ou vegetais.",
+      "tags": ["fruta", "horta", "acao", "colhe"]
+    },
+    {
+      "word": "conde",
+      "hint": "Título de nobreza abaixo de marquês.",
+      "tags": ["nobre", "titulo", "rei", "conde"]
+    },
+    {
+      "word": "coroa",
+      "hint": "Adereço usado por reis e rainhas.",
+      "tags": ["rei", "joia", "cabeca", "coroa"]
+    },
+    {
+      "word": "costa",
+      "hint": "Litoral ou parte de trás do corpo.",
+      "tags": ["mar", "praia", "litoral", "costa"]
+    },
+    {
+      "word": "coxas",
+      "hint": "Partes superiores das pernas (plural).",
+      "tags": ["perna", "corpo", "musculo", "coxa"]
+    },
+    {
+      "word": "credo",
+      "hint": "Expressão de espanto ou crença.",
+      "tags": ["surpresa", "fe", "relig", "credo"]
+    },
+    {
+      "word": "crime",
+      "hint": "Ato grave contra a lei.",
+      "tags": ["ilegal", "lei", "justica", "crime"]
+    },
+    {
+      "word": "culpa",
+      "hint": "Sentimento de ter feito algo errado.",
+      "tags": ["erro", "remorso", "emo", "culpa"]
+    },
+    {
+      "word": "cunha",
+      "hint": "Peça triangular para fixar objetos.",
+      "tags": ["fixar", "madeira", "influencia", "cunha"]
+    },
+    {
+      "word": "damas",
+      "hint": "Jogo de tabuleiro ou senhoras nobres.",
+      "tags": ["jogo", "tabule", "mulher", "damas"]
+    },
+    {
+      "word": "dardo",
+      "hint": "Lança curta para arremesso.",
+      "tags": ["lanca", "esporte", "jogo", "dardo"]
+    },
+    {
+      "word": "delta",
+      "hint": "Foz de rio em forma de leque.",
+      "tags": ["rio", "mar", "geogra", "delta"]
+    },
+    {
+      "word": "demon",
+      "hint": "Ser maligno das histórias (forma curta).",
+      "tags": ["mal", "relig", "espirit", "demon"]
+    },
+    {
+      "word": "dieta",
+      "hint": "Regime controlado de alimentação.",
+      "tags": ["comida", "saude", "regime", "dieta"]
+    },
+    {
+      "word": "disco",
+      "hint": "Objeto redondo ou mídia musical.",
+      "tags": ["circulo", "musica", "pc", "disco"]
+    },
+    {
+      "word": "divas",
+      "hint": "Mulheres famosas e talentosas (plural).",
+      "tags": ["famosa", "mulher", "arte", "diva"]
+    },
+    {
+      "word": "dogma",
+      "hint": "Crença que não pode ser questionada.",
+      "tags": ["credo", "relig", "regra", "dogma"]
+    },
+    {
+      "word": "donos",
+      "hint": "Pessoas que possuem algo (plural).",
+      "tags": ["dono", "proprio", "casa", "grupo"]
+    },
+    {
+      "word": "drama",
+      "hint": "História triste ou peça de teatro.",
+      "tags": ["teatro", "triste", "historia", "drama"]
+    },
+    {
+      "word": "duelo",
+      "hint": "Combate entre duas pessoas.",
+      "tags": ["luta", "dois", "honra", "duelo"]
+    },
+    {
+      "word": "ebano",
+      "hint": "Madeira escura e muito dura.",
+      "tags": ["madeira", "escura", "movel", "ebano"]
+    },
+    {
+      "word": "ecoar",
+      "hint": "Som que se repete no ambiente.",
+      "tags": ["som", "repetir", "monta", "ecoar"]
+    },
+    {
+      "word": "edema",
+      "hint": "Inchaço causado por líquido no corpo.",
+      "tags": ["inchaco", "corpo", "saude", "edema"]
+    },
+    {
+      "word": "egito",
+      "hint": "País antigo famoso por pirâmides.",
+      "tags": ["pais", "antigo", "pirami", "egito"]
+    },
+    {
+      "word": "elite",
+      "hint": "Grupo das melhores pessoas.",
+      "tags": ["grupo", "superior", "melhor", "elite"]
+    },
+    {
+      "word": "epico",
+      "hint": "História longa de heróis.",
+      "tags": ["historia", "heroi", "longo", "epico"]
+    },
+    {
+      "word": "erros",
+      "hint": "Falhas ou enganos (plural).",
+      "tags": ["falha", "engano", "acao", "erros"]
+    },
+    {
+      "word": "etico",
+      "hint": "Relacionado a princípios morais.",
+      "tags": ["moral", "certo", "regra", "etico"]
+    },
+    {
+      "word": "evita",
+      "hint": "Evitar algo (forma do verbo).",
+      "tags": ["evitar", "acao", "fugir", "evita"]
+    },
+    {
+      "word": "exame",
+      "hint": "Teste médico ou escolar.",
+      "tags": ["teste", "medico", "escola", "exame"]
+    },
+    {
+      "word": "exato",
+      "hint": "Precisamente correto.",
+      "tags": ["preciso", "certo", "exato", "real"]
+    },
+    {
+      "word": "extra",
+      "hint": "Além do que é comum ou necessário.",
+      "tags": ["adicional", "mais", "extra", "alemd"]
+    },
+    {
+      "word": "faina",
+      "hint": "Trabalho pesado ou atividade de pesca.",
+      "tags": ["trabalho", "pesca", "esforco", "faina"]
+    },
+    {
+      "word": "farol",
+      "hint": "Luz alta que guia navios.",
+      "tags": ["luz", "navio", "sinal", "farol"]
+    },
+    {
+      "word": "fatia",
+      "hint": "Pedaço fino cortado de algo.",
+      "tags": ["pedaco", "cortar", "comida", "fatia"]
+    },
+    {
+      "word": "fauna",
+      "hint": "Conjunto de animais de uma região.",
+      "tags": ["animal", "nature", "regiao", "fauna"]
+    },
+    {
+      "word": "fenda",
+      "hint": "Rachadura estreita em rocha ou solo.",
+      "tags": ["abertura", "fenda", "rocha", "solo"]
+    },
+    {
+      "word": "fenos",
+      "hint": "Capim seco para alimentar animais (plural).",
+      "tags": ["grama", "animal", "seco", "feno"]
+    },
+    {
+      "word": "feras",
+      "hint": "Animais selvagens e perigosos (plural).",
+      "tags": ["selva", "animal", "feroz", "feras"]
+    },
+    {
+      "word": "ficha",
+      "hint": "Cartão pequeno de registro ou jogo.",
+      "tags": ["cartao", "registro", "jogo", "ficha"]
+    },
+    {
+      "word": "filho",
+      "hint": "Criança em relação aos pais.",
+      "tags": ["pais", "crianca", "familia", "filho"]
+    },
+    {
+      "word": "final",
+      "hint": "Última parte ou conclusão.",
+      "tags": ["fim", "ultimo", "fim", "final"]
+    },
+    {
+      "word": "furor",
+      "hint": "Raiva intensa ou grande entusiasmo.",
+      "tags": ["raiva", "paixao", "forte", "furia"]
     }
   ]
 }
