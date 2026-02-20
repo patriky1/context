@@ -95,52 +95,6 @@ const THEMES = {
   },
 };
 
-function buildEvaluation(guessRaw, answerRaw) {
-  const guess = normalize(guessRaw);
-  const answer = normalize(answerRaw);
-  const g = guess.split("");
-  const a = answer.split("");
-  const result = Array(WORD_LENGTH).fill("absent");
-  const remaining = new Map();
-  for (let i = 0; i < WORD_LENGTH; i++) {
-    if (g[i] === a[i]) {
-      result[i] = "correct";
-    } else {
-      remaining.set(a[i], (remaining.get(a[i]) ?? 0) + 1);
-    }
-  }
-  for (let i = 0; i < WORD_LENGTH; i++) {
-    if (result[i] === "correct") continue;
-    const ch = g[i];
-    const count = remaining.get(ch) ?? 0;
-    if (count > 0) {
-      result[i] = "present";
-      remaining.set(ch, count - 1);
-    }
-  }
-  return result;
-}
-
-function buildLetterHint(guessRaw, answerRaw, evaluation) {
-  const answer = normalize(answerRaw);
-  const guess = normalize(guessRaw);
-  const lastIdx = Math.max(0, Math.min(WORD_LENGTH - 1, guess.length - 1));
-  const letter = (guess[lastIdx] || "").toUpperCase();
-  if (!letter) return "";
-  const status = evaluation[lastIdx];
-  if (status === "correct") {
-    return `A letra ${letter} faz parte da palavra e está na posição correta.`;
-  }
-  if (status === "present") {
-    return `A letra ${letter} faz parte da palavra mas em outra posição.`;
-  }
-  const exists = answer.includes(normalize(letter));
-  if (exists) {
-    return `A letra ${letter} faz parte da palavra mas em outra posição.`;
-  }
-  return `A letra ${letter} não faz parte da palavra.`;
-}
-
 const createStyles = (t) =>
   StyleSheet.create({
     screen: { flex: 1, backgroundColor: t.screenBg },
@@ -391,51 +345,84 @@ const TITLE_COLORS = [
   "#F97316",
 ];
 
-const GameScreen = () => {
-  const items = useMemo(() => {
-    const list = wordsData?.items ?? [];
-    return Array.isArray(list) ? list : [];
-  }, []);
+function buildEvaluation(guessRaw, answerRaw) {
+  const guess = normalize(guessRaw);
+  const answer = normalize(answerRaw);
+  const g = guess.split("");
+  const a = answer.split("");
+  const result = Array(WORD_LENGTH).fill("absent");
+  const remaining = new Map();
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    if (g[i] === a[i]) {
+      result[i] = "correct";
+      g[i] = null; // Mark as used
+    } else {
+      remaining.set(a[i], (remaining.get(a[i]) ?? 0) + 1);
+    }
+  }
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    if (result[i] === "correct") continue;
+    const ch = g[i];
+    if (ch === null) continue;
+    const count = remaining.get(ch) ?? 0;
+    if (count > 0) {
+      result[i] = "present";
+      remaining.set(ch, count - 1);
+    }
+  }
+  return result;
+}
 
-  const wordSet = useMemo(() => {
-    const set = new Set();
-    items.forEach((item) => {
-      if (item?.word) set.add(normalize(item.word));
-    });
-    return set;
-  }, [items]);
+function buildLetterHint(guessRaw, answerRaw, evaluation) {
+  const answer = normalize(answerRaw);
+  const guess = normalize(guessRaw);
+  const lastIdx = Math.max(0, Math.min(WORD_LENGTH - 1, guess.length - 1));
+  const letter = (guess[lastIdx] || "").toUpperCase();
+  if (!letter) return "";
+  const status = evaluation[lastIdx];
+  if (status === "correct") {
+    return `A letra ${letter} faz parte da palavra e está na posição correta.`;
+  }
+  if (status === "present") {
+    return `A letra ${letter} faz parte da palavra mas em outra posição.`;
+  }
+  return `A letra ${letter} não faz parte da palavra.`;
+}
+
+const GameScreen = () => {
+  const items = useMemo(() => wordsData?.items ?? [], []);
+
+  const wordSet = useMemo(() => new Set(items.map((item) => normalize(item.word))), [items]);
 
   const [theme, setTheme] = useState("dark");
   const t = THEMES[theme] ?? THEMES.dark;
   const styles = useMemo(() => createStyles(t), [t]);
 
   const inputRef = useRef(null);
-  const [current, setCurrent] = useState(null);
-  const [currentLetters, setCurrentLetters] = useState(Array(WORD_LENGTH).fill(""));
-  const [selectedCol, setSelectedCol] = useState(0);
-  const [attempts, setAttempts] = useState([]);
-  const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [done, setDone] = useState(false);
-  const [showHint, setShowHint] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
-  const [score, setScore] = useState(0);
-  const [scoreLoaded, setScoreLoaded] = useState(false);
+  const [currentWord, setCurrentWord] = useState(null);
+  const [guessLetters, setGuessLetters] = useState(Array(WORD_LENGTH).fill(""));
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [guesses, setGuesses] = useState([]);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [errorFeedback, setErrorFeedback] = useState("");
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [showWordHint, setShowWordHint] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [playerScore, setPlayerScore] = useState(0);
+  const [scoreReady, setScoreReady] = useState(false);
 
-  const flipsRef = useRef(
+  const flipAnimations = useRef(
     Array.from({ length: MAX_TRIES }, () =>
       Array.from({ length: WORD_LENGTH }, () => new Animated.Value(0)),
     ),
-  );
-  const shakeAnim = useRef(new Animated.Value(0)).current;
-  const invalidBorderAnim = useRef(new Animated.Value(0)).current;
-  const isAnimatingRef = useRef(false);
+  ).current;
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
+  const errorBorderAnimation = useRef(new Animated.Value(0)).current;
+  const isAnimating = useRef(false);
 
-  // ====================== FOCUS ANDROID ======================
-  const focusInput = useCallback(() => {
+  const focusHiddenInput = useCallback(() => {
     const input = inputRef.current;
     if (!input) return;
-
     if (Platform.OS === "android") {
       input.blur();
       setTimeout(() => input.focus(), 30);
@@ -445,107 +432,102 @@ const GameScreen = () => {
   }, []);
 
   useEffect(() => {
-    let alive = true;
-    (async () => {
+    let isMounted = true;
+    const loadScore = async () => {
       try {
-        const raw = await AsyncStorage.getItem(SCORE_KEY);
-        const n = raw != null ? Number(raw) : 0;
-        if (alive) setScore(Number.isFinite(n) ? n : 0);
+        const storedScore = await AsyncStorage.getItem(SCORE_KEY);
+        const scoreValue = storedScore ? Number(storedScore) : 0;
+        if (isMounted) setPlayerScore(Number.isFinite(scoreValue) ? scoreValue : 0);
       } catch {}
-      finally {
-        if (alive) setScoreLoaded(true);
-      }
-    })();
-    return () => { alive = false; };
+      if (isMounted) setScoreReady(true);
+    };
+    loadScore();
+    return () => { isMounted = false; };
   }, []);
 
   useEffect(() => {
-    if (!scoreLoaded) return;
-    AsyncStorage.setItem(SCORE_KEY, String(score)).catch(() => {});
-  }, [score, scoreLoaded]);
+    if (!scoreReady) return;
+    AsyncStorage.setItem(SCORE_KEY, String(playerScore)).catch(() => {});
+  }, [playerScore, scoreReady]);
 
-  const pickRandomItem = useCallback(() => {
+  const selectRandomWord = useCallback(() => {
     if (!items.length) return null;
     return items[Math.floor(Math.random() * items.length)];
   }, [items]);
 
-  const resetAnimations = useCallback(() => {
-    for (let r = 0; r < MAX_TRIES; r++) {
-      for (let c = 0; c < WORD_LENGTH; c++) {
-        flipsRef.current[r][c].setValue(0);
-      }
-    }
-    shakeAnim.setValue(0);
-    invalidBorderAnim.setValue(0);
-    isAnimatingRef.current = false;
-  }, [shakeAnim, invalidBorderAnim]);
+  const resetAnimationStates = useCallback(() => {
+    flipAnimations.forEach((row) => row.forEach((anim) => anim.setValue(0)));
+    shakeAnimation.setValue(0);
+    errorBorderAnimation.setValue(0);
+    isAnimating.current = false;
+  }, [flipAnimations, shakeAnimation, errorBorderAnimation]);
 
-  const resetRound = useCallback(() => {
-    const next = pickRandomItem();
-    setCurrent(next);
-    setAttempts([]);
-    setCurrentLetters(Array(WORD_LENGTH).fill(""));
-    setSelectedCol(0);
-    setMessage("");
-    setErrorMessage("");
-    setDone(false);
-    setShowHint(false);
-    resetAnimations();
+  const startNewRound = useCallback(() => {
+    const newWord = selectRandomWord();
+    setCurrentWord(newWord);
+    setGuesses([]);
+    setGuessLetters(Array(WORD_LENGTH).fill(""));
+    setSelectedIndex(0);
+    setFeedbackMessage("");
+    setErrorFeedback("");
+    setIsGameOver(false);
+    setShowWordHint(false);
+    resetAnimationStates();
     Keyboard.dismiss();
-  }, [pickRandomItem, resetAnimations]);
+  }, [selectRandomWord, resetAnimationStates]);
 
-  const resetAll = useCallback(async () => {
-    setScore(0);
+  const resetGameScore = useCallback(async () => {
+    setPlayerScore(0);
     try { await AsyncStorage.setItem(SCORE_KEY, "0"); } catch {}
-    resetRound();
-  }, [resetRound]);
+    startNewRound();
+  }, [startNewRound]);
 
-  useEffect(() => { resetRound(); }, [resetRound]);
+  useEffect(() => { startNewRound(); }, [startNewRound]);
 
-  const answerWord = current?.word ?? "";
-  const guessRaw = currentLetters.join("");
-  const guessNorm = normalize(guessRaw);
-  const isFullWord = guessNorm.length === WORD_LENGTH;
-  const isKnownWord = isFullWord && wordSet.has(guessNorm);
-  const canSubmit = !done && isKnownWord && attempts.length < MAX_TRIES && !isAnimatingRef.current;
+  const targetWord = currentWord?.word ?? "";
+  const currentGuess = guessLetters.join("");
+  const normalizedGuess = normalize(currentGuess);
+  const isGuessComplete = normalizedGuess.length === WORD_LENGTH;
+  const isValidWord = isGuessComplete && wordSet.has(normalizedGuess);
+  const canAttemptSubmit = !isGameOver && isValidWord && guesses.length < MAX_TRIES && !isAnimating.current;
 
-  const triggerErrorAnimation = () => {
-    isAnimatingRef.current = true;
-    setErrorMessage("Palavra não reconhecida • Digite uma palavra válida");
+  const animateError = () => {
+    isAnimating.current = true;
+    setErrorFeedback("Palavra não reconhecida • Digite uma palavra válida");
 
-    shakeAnim.setValue(0);
-    invalidBorderAnim.setValue(0);
+    shakeAnimation.setValue(0);
+    errorBorderAnimation.setValue(0);
 
     Animated.sequence([
-      Animated.timing(invalidBorderAnim, {
+      Animated.timing(errorBorderAnimation, {
         toValue: 1,
         duration: 200,
         useNativeDriver: false,
       }),
       Animated.sequence([
-        Animated.timing(shakeAnim, { toValue: 10, duration: 60, useNativeDriver: true }),
-        Animated.timing(shakeAnim, { toValue: -10, duration: 60, useNativeDriver: true }),
-        Animated.timing(shakeAnim, { toValue: 8, duration: 60, useNativeDriver: true }),
-        Animated.timing(shakeAnim, { toValue: -8, duration: 60, useNativeDriver: true }),
-        Animated.timing(shakeAnim, { toValue: 0, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: 10, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: -10, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: 8, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: -8, duration: 60, useNativeDriver: true }),
+        Animated.timing(shakeAnimation, { toValue: 0, duration: 60, useNativeDriver: true }),
       ]),
-      Animated.timing(invalidBorderAnim, {
+      Animated.timing(errorBorderAnimation, {
         toValue: 0,
         duration: 300,
         delay: 400,
         useNativeDriver: false,
       }),
     ]).start(() => {
-      isAnimatingRef.current = false;
-      setErrorMessage("");
-      focusInput();
+      isAnimating.current = false;
+      setErrorFeedback("");
+      focusHiddenInput();
     });
   };
 
-  const runFlipForRow = (rowIndex) => {
-    isAnimatingRef.current = true;
-    const anims = flipsRef.current[rowIndex].map((v) =>
-      Animated.timing(v, {
+  const animateFlipRow = (rowIndex) => {
+    isAnimating.current = true;
+    const rowAnims = flipAnimations[rowIndex].map((animVal) =>
+      Animated.timing(animVal, {
         toValue: 1,
         duration: FLIP_DURATION,
         easing: Easing.out(Easing.cubic),
@@ -553,223 +535,217 @@ const GameScreen = () => {
       }),
     );
     return new Promise((resolve) => {
-      Animated.stagger(FLIP_STAGGER, anims).start(() => {
-        flipsRef.current[rowIndex].forEach((v) => v.setValue(0));
-        isAnimatingRef.current = false;
+      Animated.stagger(FLIP_STAGGER, rowAnims).start(() => {
+        flipAnimations[rowIndex].forEach((animVal) => animVal.setValue(0));
+        isAnimating.current = false;
         resolve();
       });
     });
   };
 
-  const setCell = useCallback((index, value) => {
-    const letter = (value || "").replace(/[^a-zA-ZÀ-ÿ]/g, "").slice(-1);
+  const updateLetter = useCallback((index, input) => {
+    const letter = (input || "").replace(/[^a-zA-ZÀ-ÿ]/gi, "").slice(-1).toUpperCase();
     if (!letter) return;
-    setCurrentLetters((prev) => {
-      const next = [...prev];
-      next[index] = letter;
-      return next;
+    setGuessLetters((prev) => {
+      const updated = [...prev];
+      updated[index] = letter;
+      return updated;
     });
-    setSelectedCol(Math.min(index + 1, WORD_LENGTH - 1));
-    requestAnimationFrame(() => inputRef.current?.clear?.());
+    setSelectedIndex(Math.min(index + 1, WORD_LENGTH - 1));
+    requestAnimationFrame(() => inputRef.current?.clear());
   }, []);
 
-  const handleBackspace = useCallback(() => {
-    setCurrentLetters((prev) => {
-      const next = [...prev];
-      if (next[selectedCol]) {
-        next[selectedCol] = "";
-        return next;
+  const processBackspace = useCallback(() => {
+    setGuessLetters((prev) => {
+      const updated = [...prev];
+      if (updated[selectedIndex]) {
+        updated[selectedIndex] = "";
+      } else {
+        const prevIndex = Math.max(0, selectedIndex - 1);
+        updated[prevIndex] = "";
+        setSelectedIndex(prevIndex);
       }
-      const back = Math.max(0, selectedCol - 1);
-      next[back] = "";
-      setSelectedCol(back);
-      return next;
+      return updated;
     });
-    requestAnimationFrame(() => inputRef.current?.clear?.());
-  }, [selectedCol]);
+    requestAnimationFrame(() => inputRef.current?.clear());
+  }, [selectedIndex]);
 
-  const handleSubmit = async () => {
-    if (!answerWord) {
-      setMessage("Nenhuma palavra disponível no arquivo JSON.");
+  const submitGuess = async () => {
+    if (!targetWord) {
+      setFeedbackMessage("Nenhuma palavra disponível no arquivo JSON.");
       return;
     }
-    if (!isKnownWord) {
-      triggerErrorAnimation();
+    if (!isValidWord) {
+      animateError();
       return;
     }
 
-    const raw = guessRaw;
-    const norm = guessNorm;
-    const already = attempts.some((a) => normalize(a.guessRaw) === norm);
-    if (already) {
-      setMessage(`Você já tentou “${raw}”. Tente uma palavra diferente.`);
+    const guessString = currentGuess;
+    const normGuess = normalizedGuess;
+    const isDuplicate = guesses.some((prevGuess) => normalize(prevGuess.guessRaw) === normGuess);
+    if (isDuplicate) {
+      setFeedbackMessage(`Você já tentou “${guessString.toUpperCase()}”. Tente uma palavra diferente.`);
       Keyboard.dismiss();
       return;
     }
 
-    const rowIndex = attempts.length;
+    const currentRow = guesses.length;
     Keyboard.dismiss();
-    await runFlipForRow(rowIndex);
+    await animateFlipRow(currentRow);
 
-    const evaluation = buildEvaluation(raw, answerWord);
-    const newAttempts = [...attempts, { guessRaw: raw, evaluation }];
-    setAttempts(newAttempts);
+    const guessEvaluation = buildEvaluation(guessString, targetWord);
+    const updatedGuesses = [...guesses, { guessRaw: guessString, evaluation: guessEvaluation }];
+    setGuesses(updatedGuesses);
 
-    const isWin = norm === normalize(answerWord);
-    if (isWin) {
-      setDone(true);
-      setMessage("Parabéns, você acertou!");
-      setScore((s) => s + 1);
-      setTimeout(() => resetRound(), 900);
+    const isCorrect = normGuess === normalize(targetWord);
+    if (isCorrect) {
+      setIsGameOver(true);
+      setFeedbackMessage("Parabéns, você acertou!");
+      setPlayerScore((prev) => prev + 1);
+      setTimeout(startNewRound, 900);
       return;
     }
 
-    const hint = buildLetterHint(raw, answerWord, evaluation);
-    setMessage(hint);
+    const letterFeedback = buildLetterHint(guessString, targetWord, guessEvaluation);
+    setFeedbackMessage(letterFeedback);
 
-    if (newAttempts.length >= MAX_TRIES) {
-      setDone(true);
-      setMessage(`Fim de jogo! A palavra era ${answerWord.toUpperCase()}.`);
-      setTimeout(() => resetRound(), 1100);
+    if (updatedGuesses.length >= MAX_TRIES) {
+      setIsGameOver(true);
+      setFeedbackMessage(`Fim de jogo! A palavra era ${targetWord.toUpperCase()}.`);
+      setTimeout(startNewRound, 1100);
       return;
     }
 
-    setCurrentLetters(Array(WORD_LENGTH).fill(""));
-    setSelectedCol(0);
-    requestAnimationFrame(() => inputRef.current?.clear?.());
-    setTimeout(focusInput, 750); 
+    setGuessLetters(Array(WORD_LENGTH).fill(""));
+    setSelectedIndex(0);
+    requestAnimationFrame(() => inputRef.current?.clear());
+    setTimeout(focusHiddenInput, 750);
   };
 
-  const shakeTranslateX = shakeAnim.interpolate({
+  const shakeX = shakeAnimation.interpolate({
     inputRange: [-10, 0, 10],
     outputRange: [-12, 0, 12],
   });
 
-  const errorBorderColor = invalidBorderAnim.interpolate({
+  const errorBorder = errorBorderAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [t.cellBorder, "#ef4444"],
   });
 
-  const renderCell = (
-    row,
-    col,
-    char,
-    status,
-    isActive,
-    isCurrentRow,
+  const renderGameCell = (
+    rowIndex,
+    colIndex,
+    letter,
+    cellStatus,
+    isFocused,
+    isActiveRow,
   ) => {
-    const flipVal = flipsRef.current[row][col];
-    const rotateX = flipVal.interpolate({
+    const flipValue = flipAnimations[rowIndex][colIndex];
+    const rotation = flipValue.interpolate({
       inputRange: [0, 1],
       outputRange: ["0deg", "180deg"],
     });
-    const flipStyle = {
-      transform: [{ perspective: 800 }, { rotateX }],
+    const flipTransform = {
+      transform: [{ perspective: 800 }, { rotateX: rotation }],
     };
-    const shakeStyle = {
-      transform: [{ translateX: shakeTranslateX }],
+    const shakeTransform = {
+      transform: [{ translateX: shakeX }],
     };
-    const currentRowBorderStyle = isCurrentRow
-      ? { borderColor: isKnownWord || !isFullWord ? t.cellActiveBorder : errorBorderColor }
+    const borderStyle = isActiveRow
+      ? { borderColor: isValidWord || !isGuessComplete ? t.cellActiveBorder : errorBorder }
       : {};
 
     return (
       <Pressable
-        key={`cell-${row}-${col}`}
+        key={`cell-${rowIndex}-${colIndex}`}
         onPress={() => {
-          if (isCurrentRow) {
-            setSelectedCol(col);
-            setTimeout(focusInput, 30);
+          if (isActiveRow) {
+            setSelectedIndex(colIndex);
+            setTimeout(focusHiddenInput, 30);
           }
         }}
         style={{ flex: 1 }}
-        disabled={!isCurrentRow}
+        disabled={!isActiveRow || isAnimating.current}
+        accessibilityLabel={`Célula ${colIndex + 1} da tentativa ${rowIndex + 1}`}
       >
         <Animated.View
           style={[
             styles.cell,
-            status === "correct" && styles.cellCorrect,
-            status === "present" && styles.cellPresent,
-            status === "absent" && styles.cellAbsent,
-            isActive && styles.cellActive,
-            currentRowBorderStyle,
-            isCurrentRow && flipStyle,
+            cellStatus === "correct" && styles.cellCorrect,
+            cellStatus === "present" && styles.cellPresent,
+            cellStatus === "absent" && styles.cellAbsent,
+            isFocused && styles.cellActive,
+            borderStyle,
+            isActiveRow && flipTransform,
           ]}
         >
           <Animated.View
             style={[
               { flex: 1, justifyContent: "center", alignItems: "center" },
-              isCurrentRow && shakeStyle,
+              isActiveRow && shakeTransform,
             ]}
           >
-            <Text style={styles.cellText}>{(char || "").toUpperCase()}</Text>
+            <Text style={styles.cellText}>{letter.toUpperCase()}</Text>
           </Animated.View>
         </Animated.View>
       </Pressable>
     );
   };
 
-  const renderBoard = () => {
-    const rows = [];
-    for (let r = 0; r < MAX_TRIES; r++) {
-      const attempt = attempts[r];
-      if (attempt) {
-        const g = (attempt.guessRaw || "").split("");
-        rows.push(
-          <View key={`row-${r}`} style={styles.row}>
-            {Array.from({ length: WORD_LENGTH }).map((_, c) =>
-              renderCell(r, c, g[c] || "", attempt.evaluation[c], false, false),
+  const renderGameBoard = () => {
+    const boardRows = [];
+    for (let row = 0; row < MAX_TRIES; row++) {
+      const pastGuess = guesses[row];
+      if (pastGuess) {
+        const letters = pastGuess.guessRaw.split("");
+        boardRows.push(
+          <View key={`row-${row}`} style={styles.row}>
+            {letters.map((letter, col) =>
+              renderGameCell(row, col, letter, pastGuess.evaluation[col], false, false),
             )}
           </View>,
         );
         continue;
       }
-      if (r === attempts.length && !done) {
-        rows.push(
-          <View key={`row-${r}`} style={styles.row}>
-            {Array.from({ length: WORD_LENGTH }).map((_, c) => {
-              const isActive = c === selectedCol;
-              return renderCell(
-                r,
-                c,
-                currentLetters[c] || "",
-                null,
-                isActive,
-                true,
-              );
+      if (row === guesses.length && !isGameOver) {
+        boardRows.push(
+          <View key={`row-${row}`} style={styles.row}>
+            {guessLetters.map((letter, col) => {
+              const isFocused = col === selectedIndex;
+              return renderGameCell(row, col, letter, null, isFocused, true);
             })}
           </View>,
         );
         continue;
       }
-      rows.push(
-        <View key={`row-${r}`} style={styles.row}>
-          {Array.from({ length: WORD_LENGTH }).map((_, c) =>
-            renderCell(r, c, "", null, false, false),
+      boardRows.push(
+        <View key={`row-${row}`} style={styles.row}>
+          {Array(WORD_LENGTH).fill("").map((_, col) =>
+            renderGameCell(row, col, "", null, false, false),
           )}
         </View>,
       );
     }
-    return rows;
+    return boardRows;
   };
 
-  const toggleTheme = useCallback(() => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  const switchTheme = useCallback(() => {
+    setTheme((current) => (current === "dark" ? "light" : "dark"));
   }, []);
 
-  const renderColoredTitle = () => {
-    const text = "CONTEXT";
+  const renderTitle = () => {
+    const titleText = "CONTEXT";
     return (
       <View style={styles.titleRow}>
-        {text.split("").map((ch, idx) => (
+        {titleText.split("").map((char, index) => (
           <Text
-            key={`title-${idx}-${ch}`}
+            key={`title-char-${index}`}
             style={[
               styles.titleChar,
-              { color: TITLE_COLORS[idx % TITLE_COLORS.length] },
+              { color: TITLE_COLORS[index % TITLE_COLORS.length] },
             ]}
           >
-            {ch}
+            {char}
           </Text>
         ))}
       </View>
@@ -788,11 +764,11 @@ const GameScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          {renderColoredTitle()}
+          {renderTitle()}
           <View style={styles.tutorialRow}>
             <View style={styles.rightHeaderGroup}>
               <Pressable
-                onPress={() => setShowTutorial(true)}
+                onPress={() => setShowInstructions(true)}
                 style={({ pressed }) => [
                   styles.pillBtn,
                   pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
@@ -804,11 +780,11 @@ const GameScreen = () => {
             <View style={styles.scorePill}>
               <Text style={styles.scorePillLabel}>Pontuação</Text>
               <Text style={styles.scorePillValue}>
-                {scoreLoaded ? score : "—"}
+                {scoreReady ? playerScore : "—"}
               </Text>
             </View>
             <Pressable
-              onPress={toggleTheme}
+              onPress={switchTheme}
               style={({ pressed }) => [
                 styles.pillBtn,
                 pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
@@ -825,67 +801,65 @@ const GameScreen = () => {
           <View style={styles.hintRow}>
             <View style={styles.hintHeader}>
               <Pressable
-                onPress={() => setShowHint((v) => !v)}
+                onPress={() => setShowWordHint((prev) => !prev)}
                 style={({ pressed }) => [
                   styles.hintBtn,
                   pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
                 ]}
               >
                 <Text style={styles.hintBtnText}>
-                  {showHint ? "Ocultar dica" : "Mostrar dica"}
+                  {showWordHint ? "Ocultar dica" : "Mostrar dica"}
                 </Text>
               </Pressable>
             </View>
-            {showHint && (
+            {showWordHint && (
               <View style={styles.hintChip}>
                 <Text style={styles.hintText}>
-                  {current?.hint ? current.hint : "Carregando..."}
+                  {currentWord?.hint ?? "Carregando..."}
                 </Text>
               </View>
             )}
           </View>
 
-          <Pressable onPress={focusInput} style={styles.board}>
-            {renderBoard()}
+          <Pressable onPress={focusHiddenInput} style={styles.board}>
+            {renderGameBoard()}
           </Pressable>
 
           <TextInput
             ref={inputRef}
-            value={""}
-            onChangeText={(t) => setCell(selectedCol, t)}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === "Backspace") handleBackspace();
+            value=""
+            onChangeText={(text) => updateLetter(selectedIndex, text)}
+            onKeyPress={({ nativeEvent: { key } }) => {
+              if (key === "Backspace") processBackspace();
             }}
             autoCapitalize="characters"
             autoCorrect={false}
             returnKeyType="done"
-            onSubmitEditing={handleSubmit}
+            onSubmitEditing={submitGuess}
             blurOnSubmit={false}
             maxLength={1}
             style={styles.hiddenInput}
+            accessibilityLabel="Entrada de letra oculta"
           />
 
           <Pressable
-            onPress={handleSubmit}
-            disabled={!canSubmit}
+            onPress={submitGuess}
+            disabled={!canAttemptSubmit}
             style={({ pressed }) => [
               styles.primaryBtn,
-              !canSubmit && { opacity: 0.5 },
-              pressed &&
-                canSubmit && { transform: [{ scale: 0.99 }], opacity: 0.95 },
+              !canAttemptSubmit && { opacity: 0.5 },
+              pressed && canAttemptSubmit && { transform: [{ scale: 0.99 }], opacity: 0.95 },
             ]}
           >
             <Text style={styles.primaryBtnText}>Verificar</Text>
           </Pressable>
 
-          {errorMessage ? (
-            <Text style={styles.errorMessage}>{errorMessage}</Text>
-          ) : message ? (
-            <Text style={styles.message}>{message}</Text>
+          {errorFeedback ? (
+            <Text style={styles.errorMessage}>{errorFeedback}</Text>
           ) : null}
 
           <Pressable
-            onPress={resetRound}
+            onPress={startNewRound}
             style={({ pressed }) => [
               styles.secondaryBtn,
               pressed && { opacity: 0.9 },
@@ -895,7 +869,7 @@ const GameScreen = () => {
           </Pressable>
 
           <Pressable
-            onPress={resetAll}
+            onPress={resetGameScore}
             style={({ pressed }) => [
               styles.secondaryBtnDanger,
               pressed && { opacity: 0.9 },
@@ -914,10 +888,10 @@ const GameScreen = () => {
       </ScrollView>
 
       <Modal
-        visible={showTutorial}
+        visible={showInstructions}
         transparent
         animationType="fade"
-        onRequestClose={() => setShowTutorial(false)}
+        onRequestClose={() => setShowInstructions(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
@@ -939,7 +913,7 @@ const GameScreen = () => {
               nas dicas.
             </Text>
             <Pressable
-              onPress={() => setShowTutorial(false)}
+              onPress={() => setShowInstructions(false)}
               style={({ pressed }) => [
                 styles.modalCloseBtn,
                 pressed && { opacity: 0.9 },
