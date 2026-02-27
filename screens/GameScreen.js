@@ -224,7 +224,15 @@ const createStyles = (t) =>
       borderColor: t.cellBorder,
       backfaceVisibility: "hidden",
     },
-    cellActive: { borderColor: t.cellActiveBorder },
+    cellActive: {
+      borderColor: t.primary, // Defina a cor da borda para indicar a seleção
+      borderWidth: 0, // Defina a largura da borda para o destaque
+      shadowColor: t.primary, // Cor da sombra para dar um efeito de destaque
+      shadowOpacity: 10,
+      shadowRadius: 1,
+      shadowOffset: { width: 0, height: 0 }, // Efeito de sombra
+      elevation: 1 // Sombra para Android
+    },
     cellCorrect: { backgroundColor: t.correctBg, borderColor: t.correctBorder },
     cellPresent: { backgroundColor: t.presentBg, borderColor: t.presentBorder },
     cellAbsent: { backgroundColor: t.absentBg, borderColor: t.absentBorder },
@@ -743,52 +751,52 @@ const GameScreen = () => {
   });
 
   const renderGameCell = (rowIndex, colIndex, letter, cellStatus, isFocused, isActiveRow) => {
-    const flipValue = flipAnimations[rowIndex][colIndex];
-    const rotation = flipValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ["0deg", "180deg"],
-    });
+  const flipValue = flipAnimations[rowIndex][colIndex];
+  const rotation = flipValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "180deg"],
+  });
 
-    const flipTransform = { transform: [{ perspective: 800 }, { rotateX: rotation }] };
-    const shakeTransform = { transform: [{ translateX: shakeX }] };
+  const flipTransform = { transform: [{ perspective: 800 }, { rotateX: rotation }] };
+  const shakeTransform = { transform: [{ translateX: shakeX }] };
 
-    const borderStyle = isActiveRow
-      ? { borderColor: isValidWord || !isGuessComplete ? t.cellActiveBorder : errorBorder }
-      : {};
+  const borderStyle = isActiveRow
+    ? { borderColor: isValidWord || !isGuessComplete ? t.cellActiveBorder : errorBorder }
+    : {};
 
-    return (
-      <Pressable
-        key={`cell-${rowIndex}-${colIndex}`}
-        onPress={() => {
-          if (isActiveRow) setSelectedIndex(colIndex);
-        }}
-        style={{ flex: 1 }}
-        disabled={!isActiveRow || isAnimating.current}
-        accessibilityLabel={`Célula ${colIndex + 1} da tentativa ${rowIndex + 1}`}
+  return (
+    <Pressable
+      key={`cell-${rowIndex}-${colIndex}`}
+      onPress={() => {
+        if (isActiveRow) setSelectedIndex(colIndex); // Atualiza o índice da célula selecionada
+      }}
+      style={{ flex: 1 }}
+      disabled={!isActiveRow || isAnimating.current}
+      accessibilityLabel={`Célula ${colIndex + 1} da tentativa ${rowIndex + 1}`}
+    >
+      <Animated.View
+        style={[
+          styles.cell,
+          cellStatus === "correct" && styles.cellCorrect,
+          cellStatus === "present" && styles.cellPresent,
+          cellStatus === "absent" && styles.cellAbsent,
+          isFocused && styles.cellActive, // Aplica o estilo de foco quando a célula está selecionada
+          borderStyle,
+          isActiveRow && flipTransform,
+        ]}
       >
         <Animated.View
           style={[
-            styles.cell,
-            cellStatus === "correct" && styles.cellCorrect,
-            cellStatus === "present" && styles.cellPresent,
-            cellStatus === "absent" && styles.cellAbsent,
-            isFocused && styles.cellActive,
-            borderStyle,
-            isActiveRow && flipTransform,
+            { flex: 1, justifyContent: "center", alignItems: "center" },
+            isActiveRow && shakeTransform,
           ]}
         >
-          <Animated.View
-            style={[
-              { flex: 1, justifyContent: "center", alignItems: "center" },
-              isActiveRow && shakeTransform,
-            ]}
-          >
-            <Text style={styles.cellText}>{(letter || "").toUpperCase()}</Text>
-          </Animated.View>
+          <Text style={styles.cellText}>{(letter || "").toUpperCase()}</Text>
         </Animated.View>
-      </Pressable>
-    );
-  };
+      </Animated.View>
+    </Pressable>
+  );
+};
 
   const renderGameBoard = () => {
     const boardRows = [];
