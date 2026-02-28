@@ -93,7 +93,7 @@ const createStyles = (t) =>
     container: {
       paddingHorizontal: 20,
       paddingTop: 35,
-      paddingBottom: 24,
+      paddingBottom: 18,
       flexGrow: 1,
     },
     header: { marginBottom: 10 },
@@ -166,6 +166,22 @@ const createStyles = (t) =>
       fontSize: 14,
       fontWeight: "900",
     },
+    modePill: {
+      alignSelf: "center",
+      paddingVertical: 6,
+      paddingHorizontal: 10,
+      borderRadius: 999,
+      backgroundColor: t.pillBg,
+      borderWidth: 1,
+      borderColor: t.pillBorder,
+    },
+    modePillText: {
+      color: t.textMuted2,
+      fontSize: 13,
+      fontWeight: "900",
+      letterSpacing: 0.6,
+      textTransform: "uppercase",
+    },
     card: {
       backgroundColor: t.cardBg,
       borderRadius: 18,
@@ -177,13 +193,13 @@ const createStyles = (t) =>
       shadowRadius: 14,
       shadowOffset: { width: 0, height: 8 },
       elevation: 80,
-      marginBottom: 25,
+      marginBottom: 16,
     },
     hintRow: { marginBottom: 0 },
     hintHeader: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "flex-end",
+      justifyContent: "space-between",
     },
     hintBtn: {
       paddingVertical: 8,
@@ -211,12 +227,39 @@ const createStyles = (t) =>
       marginTop: 10,
     },
     hintText: { color: t.text, fontSize: 14, fontWeight: "600" },
-    board: { marginTop: 10, marginBottom: 12 },
-    row: { flexDirection: "row", gap: 10, marginBottom: 10 },
+
+    boardsWrap: { marginTop: 10, marginBottom: 8, gap: 10 },
+    boardShell: {
+      borderWidth: 1,
+      borderColor: t.borderSoft,
+      borderRadius: 12,
+      padding: 4,
+      backgroundColor: "transparent",
+    },
+    boardLabelRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: 2,
+    },
+    boardLabel: {
+      color: t.textMuted2,
+      fontSize: 10,
+      fontWeight: "900",
+      letterSpacing: 0.6,
+      textTransform: "uppercase",
+    },
+    boardSolved: {
+      color: t.kicker,
+      fontSize: 12,
+      fontWeight: "900",
+    },
+    board: { marginTop: 2, marginBottom: 2 },
+    row: { flexDirection: "row", gap: 6, marginBottom: 6 },
     cell: {
       flex: 1,
-      height: 54,
-      borderRadius: 10,
+      height: 34,
+      borderRadius: 7,
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: t.cellBg,
@@ -225,23 +268,39 @@ const createStyles = (t) =>
       backfaceVisibility: "hidden",
     },
     cellActive: {
-      borderColor: t.primary, // Defina a cor da borda para indicar a seleção
-      borderWidth: 0, // Defina a largura da borda para o destaque
-      shadowColor: t.primary, // Cor da sombra para dar um efeito de destaque
+      borderColor: t.primary,
+      borderWidth: 0,
+      shadowColor: t.primary,
       shadowOpacity: 10,
       shadowRadius: 1,
-      shadowOffset: { width: 0, height: 0 }, // Efeito de sombra
-      elevation: 1 // Sombra para Android
+      shadowOffset: { width: 0, height: 0 },
+      elevation: 1,
     },
     cellCorrect: { backgroundColor: t.correctBg, borderColor: t.correctBorder },
     cellPresent: { backgroundColor: t.presentBg, borderColor: t.presentBorder },
     cellAbsent: { backgroundColor: t.absentBg, borderColor: t.absentBorder },
     cellText: {
       color: t.text,
-      fontSize: 20,
+      fontSize: 16,
       fontWeight: "800",
       letterSpacing: 1,
     },
+
+    errorMessage: {
+      color: "#ef4444",
+      fontSize: 14,
+      fontWeight: "700",
+      marginBottom: 6,
+      textAlign: "center",
+    },
+    feedbackMessage: {
+      color: t.textMuted2,
+      fontSize: 13,
+      fontWeight: "700",
+      marginBottom: 6,
+      textAlign: "center",
+    },
+
     primaryBtn: {
       backgroundColor: t.primary,
       paddingVertical: 12,
@@ -250,20 +309,13 @@ const createStyles = (t) =>
       marginBottom: 10,
     },
     primaryBtnText: { color: "#FFFFFF", fontSize: 16, fontWeight: "700" },
-    errorMessage: {
-      color: "#ef4444",
-      fontSize: 15,
-      fontWeight: "600",
-      marginTop: 6,
-      marginBottom: 6,
-      textAlign: "center",
-    },
+
     note: {
       color: t.textMuted,
       fontSize: 12,
       lineHeight: 18,
-      marginTop: 4,
-      marginBottom: 12,
+      marginTop: 6,
+      marginBottom: 8,
     },
     secondaryBtn: {
       backgroundColor: t.pillBg,
@@ -284,10 +336,17 @@ const createStyles = (t) =>
     },
     secondaryBtnText: { color: t.text, fontSize: 15, fontWeight: "700" },
 
+    keyboardDock: {
+      backgroundColor: t.cardBg,
+      borderTopWidth: 1,
+      borderTopColor: t.borderSoft,
+      paddingHorizontal: 14,
+      paddingTop: 10,
+      paddingBottom: Platform.OS === "ios" ? 16 : 12,
+    },
     keyboardWrap: {
-      marginTop: 6,
-      marginBottom: 10,
-      gap: 8,
+      gap: 10,
+      marginBottom:30
     },
     keyboardRow: {
       flexDirection: "row",
@@ -303,7 +362,6 @@ const createStyles = (t) =>
       borderWidth: 1,
       backgroundColor: t.cellBg,
       borderColor: t.cellBorder,
-      
     },
     keyBackspace: {
       flex: 1.35,
@@ -311,9 +369,6 @@ const createStyles = (t) =>
     keyPressed: {
       transform: [{ scale: 0.99 }],
       opacity: 0.92,
-    },
-    keyDisabled: {
-      opacity: 0.35,
     },
     keyText: {
       color: t.text,
@@ -360,15 +415,7 @@ const createStyles = (t) =>
     modalCloseText: { color: "#fff", fontSize: 15, fontWeight: "700" },
   });
 
-const TITLE_COLORS = [
-  "#22C55E",
-  "#3B82F6",
-  "#F59E0B",
-  "#EF4444",
-  "#A855F7",
-  "#06B6D4",
-  "#F97316",
-];
+const TITLE_COLORS = ["#22C55E", "#3B82F6", "#F59E0B", "#EF4444", "#A855F7", "#06B6D4", "#F97316"];
 
 function buildEvaluation(guessRaw, answerRaw) {
   const guess = normalize(guessRaw);
@@ -401,19 +448,13 @@ function buildEvaluation(guessRaw, answerRaw) {
 }
 
 function buildLetterHint(guessRaw, answerRaw, evaluation) {
-  const answer = normalize(answerRaw);
   const guess = normalize(guessRaw);
   const lastIdx = Math.max(0, Math.min(WORD_LENGTH - 1, guess.length - 1));
   const letter = (guess[lastIdx] || "").toUpperCase();
   if (!letter) return "";
   const status = evaluation[lastIdx];
-
-  if (status === "correct") {
-    return `A letra ${letter} faz parte da palavra e está na posição correta.`;
-  }
-  if (status === "present") {
-    return `A letra ${letter} faz parte da palavra mas em outra posição.`;
-  }
+  if (status === "correct") return `A letra ${letter} faz parte da palavra e está na posição correta.`;
+  if (status === "present") return `A letra ${letter} faz parte da palavra mas em outra posição.`;
   return `A letra ${letter} não faz parte da palavra.`;
 }
 
@@ -424,21 +465,11 @@ const KEYBOARD_ROWS = [
 ];
 
 const getKeyStyleByStatus = (t, status) => {
-  if (status === "correct") {
-    return { backgroundColor: t.correctBg, borderColor: t.correctBorder };
-  }
-  if (status === "present") {
-    return { backgroundColor: t.presentBg, borderColor: t.presentBorder };
-  }
-  if (status === "absent") {
-    return { 
-      backgroundColor: t.cellBg, 
-      borderColor: t.absentBorder, 
-      opacity: 0.6, // Indica que a tecla não é a melhor opção, mas ainda pode ser usada
-    };
-  }
+  if (status === "correct") return { backgroundColor: t.correctBg, borderColor: t.correctBorder };
+  if (status === "present") return { backgroundColor: t.presentBg, borderColor: t.presentBorder };
+  if (status === "absent") return { backgroundColor: t.cellBg, borderColor: t.absentBorder, opacity: 0.6 };
   return { backgroundColor: t.cellBg, borderColor: t.cellBorder };
-}
+};
 
 const WordleKeyboard = ({ t, styles, statuses, onKey, onBackspace, disabled }) => {
   return (
@@ -447,11 +478,7 @@ const WordleKeyboard = ({ t, styles, statuses, onKey, onBackspace, disabled }) =
         <View key={`kb-row-${rowIndex}`} style={styles.keyboardRow}>
           {row.map((k) => {
             const st = k === "BACKSPACE" ? "unused" : statuses[k] ?? "unused";
-
-            // Permite que as teclas "absent" sejam pressionadas, mas com estilo modificado
-            const lockedByAbsent = k !== "BACKSPACE" && st === "absent"; 
-            const isKeyDisabled = disabled; // Não desabilita a tecla de 'absent', ela pode ser usada
-
+            const isKeyDisabled = disabled;
             const label = k === "BACKSPACE" ? "⌫" : k;
 
             return (
@@ -462,7 +489,7 @@ const WordleKeyboard = ({ t, styles, statuses, onKey, onBackspace, disabled }) =
                   if (k === "BACKSPACE") onBackspace?.();
                   else onKey?.(k);
                 }}
-                disabled={isKeyDisabled} // Teclas não são desabilitadas, apenas recebem um estilo diferente
+                disabled={isKeyDisabled}
                 style={({ pressed }) => [
                   styles.key,
                   k === "BACKSPACE" && styles.keyBackspace,
@@ -484,24 +511,24 @@ const WordleKeyboard = ({ t, styles, statuses, onKey, onBackspace, disabled }) =
 
 const GameScreen = () => {
   const items = useMemo(() => wordsData?.items ?? [], []);
-  const wordSet = useMemo(
-    () => new Set(items.map((item) => normalize(item.word))),
-    [items],
-  );
+  const wordSet = useMemo(() => new Set(items.map((item) => normalize(item.word))), [items]);
 
   const [theme, setTheme] = useState("dark");
   const t = THEMES[theme] ?? THEMES.dark;
   const styles = useMemo(() => createStyles(t), [t]);
 
-  const [currentWord, setCurrentWord] = useState(null);
+  const [boardCount, setBoardCount] = useState(1);
+  const [boards, setBoards] = useState([]);
+  const [guesses, setGuesses] = useState([]);
   const [guessLetters, setGuessLetters] = useState(Array(WORD_LENGTH).fill(""));
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [guesses, setGuesses] = useState([]);
+
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [errorFeedback, setErrorFeedback] = useState("");
   const [isGameOver, setIsGameOver] = useState(false);
   const [showWordHint, setShowWordHint] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
+
   const [playerScore, setPlayerScore] = useState(0);
   const [scoreReady, setScoreReady] = useState(false);
 
@@ -536,11 +563,6 @@ const GameScreen = () => {
     AsyncStorage.setItem(SCORE_KEY, String(playerScore)).catch(() => {});
   }, [playerScore, scoreReady]);
 
-  const selectRandomWord = useCallback(() => {
-    if (!items.length) return null;
-    return items[Math.floor(Math.random() * items.length)];
-  }, [items]);
-
   const resetAnimationStates = useCallback(() => {
     flipAnimations.forEach((row) => row.forEach((anim) => anim.setValue(0)));
     shakeAnimation.setValue(0);
@@ -548,52 +570,113 @@ const GameScreen = () => {
     isAnimating.current = false;
   }, [flipAnimations, shakeAnimation, errorBorderAnimation]);
 
-  const startNewRound = useCallback(() => {
-    const newWord = selectRandomWord();
-    console.log("✅ Palavra sorteada:", newWord?.word);
+  const pickRandomWords = useCallback(
+    (count) => {
+      if (!items.length) return [];
+      const picked = [];
+      const used = new Set();
+      let guard = 0;
 
-    setCurrentWord(newWord);
-    setGuesses([]);
-    setGuessLetters(Array(WORD_LENGTH).fill(""));
-    setSelectedIndex(0);
-    setFeedbackMessage("");
-    setErrorFeedback("");
-    setIsGameOver(false);
-    setShowWordHint(false);
-    resetAnimationStates();
-  }, [selectRandomWord, resetAnimationStates]);
+      while (picked.length < count && guard < 2000) {
+        const candidate = items[Math.floor(Math.random() * items.length)];
+        const key = normalize(candidate?.word);
+        if (!key) {
+          guard++;
+          continue;
+        }
+        if (used.has(key)) {
+          guard++;
+          continue;
+        }
+        used.add(key);
+        picked.push(candidate);
+        guard++;
+      }
+
+      while (picked.length < count) {
+        picked.push(items[Math.floor(Math.random() * items.length)]);
+      }
+
+      return picked;
+    },
+    [items],
+  );
+
+  const modeName = useMemo(() => {
+    if (boardCount === 1) return "Termo";
+    if (boardCount === 2) return "Dueto";
+    return "Quarteto";
+  }, [boardCount]);
+
+  const startStage = useCallback(
+    (count) => {
+      const words = pickRandomWords(count);
+
+      console.log(
+        `🎲 Modo ${count === 1 ? "TERMO" : count === 2 ? "DUETO" : "QUARTETO"} - Palavras:`,
+        words.map((w) => (w?.word ?? "").toUpperCase()).join(" • "),
+      );
+
+      setBoardCount(count);
+      setBoards(words.map((w) => ({ word: w?.word ?? "", hint: w?.hint ?? "", solved: false })));
+      setGuesses([]);
+      setGuessLetters(Array(WORD_LENGTH).fill(""));
+      setSelectedIndex(0);
+      setFeedbackMessage("");
+      setErrorFeedback("");
+      setIsGameOver(false);
+      setShowWordHint(false);
+      resetAnimationStates();
+    },
+    [pickRandomWords, resetAnimationStates],
+  );
+
+  const restartCurrentStage = useCallback(() => {
+    startStage(boardCount);
+  }, [startStage, boardCount]);
+
+  const advanceStageAfterWin = useCallback(() => {
+    if (boardCount === 1) startStage(2);
+    else if (boardCount === 2) startStage(4);
+    else startStage(1);
+  }, [boardCount, startStage]);
 
   const resetGameScore = useCallback(async () => {
     setPlayerScore(0);
     try {
       await AsyncStorage.setItem(SCORE_KEY, "0");
     } catch {}
-    startNewRound();
-  }, [startNewRound]);
+    startStage(1);
+  }, [startStage]);
 
   useEffect(() => {
-    startNewRound();
-  }, [startNewRound]);
+    startStage(1);
+  }, [startStage]);
 
-  const targetWord = currentWord?.word ?? "";
   const currentGuess = guessLetters.join("");
   const normalizedGuess = normalize(currentGuess);
   const isGuessComplete = normalizedGuess.length === WORD_LENGTH;
   const isValidWord = isGuessComplete && wordSet.has(normalizedGuess);
+
   const canAttemptSubmit =
     !isGameOver && isValidWord && guesses.length < MAX_TRIES && !isAnimating.current;
 
   const letterStatuses = useMemo(() => {
     const rank = { unused: 0, absent: 1, present: 2, correct: 3 };
     const acc = {};
+
     for (const g of guesses) {
       const letters = (normalize(g.guessRaw) || "").toUpperCase().split("");
-      for (let i = 0; i < Math.min(WORD_LENGTH, letters.length); i++) {
-        const ch = letters[i];
-        const st = g.evaluation[i]; 
-        if (!ch) continue;
-        const prev = acc[ch] ?? "unused";
-        if (rank[st] > rank[prev]) acc[ch] = st;
+      const evals = Array.isArray(g.evaluations) ? g.evaluations : [];
+      for (const ev of evals) {
+        if (!ev) continue;
+        for (let i = 0; i < Math.min(WORD_LENGTH, letters.length); i++) {
+          const ch = letters[i];
+          const st = ev[i];
+          if (!ch) continue;
+          const prev = acc[ch] ?? "unused";
+          if (rank[st] > rank[prev]) acc[ch] = st;
+        }
       }
     }
     return acc;
@@ -606,13 +689,9 @@ const GameScreen = () => {
     shakeAnimation.setValue(0);
     errorBorderAnimation.setValue(0);
 
-    Animated.sequence([ 
-      Animated.timing(errorBorderAnimation, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: false,
-      }),
-      Animated.sequence([ 
+    Animated.sequence([
+      Animated.timing(errorBorderAnimation, { toValue: 1, duration: 200, useNativeDriver: false }),
+      Animated.sequence([
         Animated.timing(shakeAnimation, { toValue: 10, duration: 60, useNativeDriver: true }),
         Animated.timing(shakeAnimation, { toValue: -10, duration: 60, useNativeDriver: true }),
         Animated.timing(shakeAnimation, { toValue: 8, duration: 60, useNativeDriver: true }),
@@ -667,7 +746,6 @@ const GameScreen = () => {
   const handleKeyPress = useCallback(
     (letter) => {
       if (isGameOver || isAnimating.current) return;
-
       updateLetterAtIndex(selectedIndex, letter);
     },
     [isGameOver, selectedIndex, updateLetterAtIndex],
@@ -690,7 +768,7 @@ const GameScreen = () => {
   }, [isGameOver, selectedIndex]);
 
   const submitGuess = async () => {
-    if (!targetWord) {
+    if (!boards.length || boards.some((b) => !b.word)) {
       setFeedbackMessage("Nenhuma palavra disponível no arquivo JSON.");
       return;
     }
@@ -701,38 +779,72 @@ const GameScreen = () => {
 
     const guessString = currentGuess;
     const normGuess = normalizedGuess;
-    const isDuplicate = guesses.some((prevGuess) => normalize(prevGuess.guessRaw) === normGuess);
 
+    const isDuplicate = guesses.some((prevGuess) => normalize(prevGuess.guessRaw) === normGuess);
     if (isDuplicate) {
-      setFeedbackMessage(
-        `Você já tentou “${guessString.toUpperCase()}”. Tente uma palavra diferente.`,
-      );
+      setFeedbackMessage(`Você já tentou “${guessString.toUpperCase()}”. Tente uma palavra diferente.`);
       return;
     }
 
     const currentRow = guesses.length;
     await animateFlipRow(currentRow);
 
-    const guessEvaluation = buildEvaluation(guessString, targetWord);
-    const updatedGuesses = [...guesses, { guessRaw: guessString, evaluation: guessEvaluation }];
-    setGuesses(updatedGuesses);
+    let solvedNow = 0;
+    const newBoards = boards.map((b) => {
+      if (b.solved) return b;
+      const ok = normGuess === normalize(b.word);
+      if (ok) solvedNow++;
+      return { ...b, solved: ok ? true : b.solved };
+    });
 
-    const isCorrect = normGuess === normalize(targetWord);
-    if (isCorrect) {
+    const evaluations = boards.map((b) => {
+      if (b.solved) return null;
+      return buildEvaluation(guessString, b.word);
+    });
+
+    const updatedGuesses = [...guesses, { guessRaw: guessString, evaluations }];
+    setGuesses(updatedGuesses);
+    setBoards(newBoards);
+
+    if (solvedNow > 0) {
+      setPlayerScore((prev) => prev + solvedNow);
+    } else {
+      const idx = newBoards.findIndex((b) => !b.solved);
+      const hintIdx = idx === -1 ? 0 : idx;
+      const ev = evaluations[hintIdx];
+      if (ev) setFeedbackMessage(`Tabuleiro ${hintIdx + 1}: ${buildLetterHint(guessString, boards[hintIdx].word, ev)}`);
+      else setFeedbackMessage("");
+    }
+
+    const allSolved = newBoards.every((b) => b.solved);
+
+    if (allSolved) {
       setIsGameOver(true);
-      setFeedbackMessage("Parabéns, você acertou!");
-      setPlayerScore((prev) => prev + 1);
-      setTimeout(startNewRound, 900);
+      setFeedbackMessage(
+        boardCount === 1
+          ? "Parabéns! Agora você desbloqueou o Dueto 😄"
+          : boardCount === 2
+            ? "Dueto completo! Agora vem o Quarteto 🔥"
+            : "Quarteto completo! Bora outro? 🚀",
+      );
+
+      setTimeout(() => {
+        advanceStageAfterWin();
+      }, 900);
       return;
     }
 
-    const letterFeedback = buildLetterHint(guessString, targetWord, guessEvaluation);
-    setFeedbackMessage(letterFeedback);
-
     if (updatedGuesses.length >= MAX_TRIES) {
       setIsGameOver(true);
-      setFeedbackMessage(`Fim de jogo! A palavra era ${targetWord.toUpperCase()}.`);
-      setTimeout(startNewRound, 1100);
+      const missing = newBoards
+        .map((b, i) => (!b.solved ? `#${i + 1}: ${String(b.word).toUpperCase()}` : null))
+        .filter(Boolean)
+        .join(" • ");
+
+      setFeedbackMessage(`Fim de jogo! Palavras: ${missing}`);
+      setTimeout(() => {
+        restartCurrentStage();
+      }, 1200);
       return;
     }
 
@@ -751,73 +863,85 @@ const GameScreen = () => {
   });
 
   const renderGameCell = (rowIndex, colIndex, letter, cellStatus, isFocused, isActiveRow) => {
-  const flipValue = flipAnimations[rowIndex][colIndex];
-  const rotation = flipValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "180deg"],
-  });
+    const flipValue = flipAnimations[rowIndex][colIndex];
+    const rotation = flipValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0deg", "180deg"],
+    });
 
-  const flipTransform = { transform: [{ perspective: 800 }, { rotateX: rotation }] };
-  const shakeTransform = { transform: [{ translateX: shakeX }] };
+    const flipTransform = { transform: [{ perspective: 800 }, { rotateX: rotation }] };
+    const shakeTransform = { transform: [{ translateX: shakeX }] };
 
-  const borderStyle = isActiveRow
-    ? { borderColor: isValidWord || !isGuessComplete ? t.cellActiveBorder : errorBorder }
-    : {};
+    const borderStyle = isActiveRow
+      ? { borderColor: isValidWord || !isGuessComplete ? t.cellActiveBorder : errorBorder }
+      : {};
 
-  return (
-    <Pressable
-      key={`cell-${rowIndex}-${colIndex}`}
-      onPress={() => {
-        if (isActiveRow) setSelectedIndex(colIndex); // Atualiza o índice da célula selecionada
-      }}
-      style={{ flex: 1 }}
-      disabled={!isActiveRow || isAnimating.current}
-      accessibilityLabel={`Célula ${colIndex + 1} da tentativa ${rowIndex + 1}`}
-    >
-      <Animated.View
-        style={[
-          styles.cell,
-          cellStatus === "correct" && styles.cellCorrect,
-          cellStatus === "present" && styles.cellPresent,
-          cellStatus === "absent" && styles.cellAbsent,
-          isFocused && styles.cellActive, // Aplica o estilo de foco quando a célula está selecionada
-          borderStyle,
-          isActiveRow && flipTransform,
-        ]}
+    return (
+      <Pressable
+        key={`cell-${rowIndex}-${colIndex}`}
+        onPress={() => {
+          if (isActiveRow) setSelectedIndex(colIndex);
+        }}
+        style={{ flex: 1 }}
+        disabled={!isActiveRow || isAnimating.current}
       >
         <Animated.View
           style={[
-            { flex: 1, justifyContent: "center", alignItems: "center" },
-            isActiveRow && shakeTransform,
+            styles.cell,
+            cellStatus === "correct" && styles.cellCorrect,
+            cellStatus === "present" && styles.cellPresent,
+            cellStatus === "absent" && styles.cellAbsent,
+            isFocused && styles.cellActive,
+            borderStyle,
+            isActiveRow && flipTransform,
           ]}
         >
-          <Text style={styles.cellText}>{(letter || "").toUpperCase()}</Text>
+          <Animated.View
+            style={[
+              { flex: 1, justifyContent: "center", alignItems: "center" },
+              isActiveRow && shakeTransform,
+            ]}
+          >
+            <Text style={styles.cellText}>{(letter || "").toUpperCase()}</Text>
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
-    </Pressable>
-  );
-};
+      </Pressable>
+    );
+  };
 
-  const renderGameBoard = () => {
+  const renderBoard = (boardIndex) => {
+    const board = boards[boardIndex];
     const boardRows = [];
-    for (let row = 0; row < MAX_TRIES; row++) {
-      const pastGuess = guesses[row];
 
-      if (pastGuess) {
-        const letters = pastGuess.guessRaw.split("");
-        boardRows.push(
-          <View key={`row-${row}`} style={styles.row}>
-            {letters.map((letter, col) =>
-              renderGameCell(row, col, letter, pastGuess.evaluation[col], false, false),
-            )}
-          </View>,
-        );
+    for (let row = 0; row < MAX_TRIES; row++) {
+      const past = guesses[row];
+      if (past) {
+        const ev = past.evaluations?.[boardIndex] ?? null;
+
+        if (ev) {
+          const letters = past.guessRaw.split("");
+          boardRows.push(
+            <View key={`b${boardIndex}-row-${row}`} style={styles.row}>
+              {letters.map((letter, col) => renderGameCell(row, col, letter, ev[col], false, false))}
+            </View>,
+          );
+        } else {
+          boardRows.push(
+            <View key={`b${boardIndex}-row-${row}`} style={styles.row}>
+              {Array(WORD_LENGTH)
+                .fill("")
+                .map((_, col) => renderGameCell(row, col, "", null, false, false))}
+            </View>,
+          );
+        }
         continue;
       }
 
-      if (row === guesses.length && !isGameOver) {
+      const isActiveRow = row === guesses.length && !isGameOver && !board?.solved;
+
+      if (isActiveRow) {
         boardRows.push(
-          <View key={`row-${row}`} style={styles.row}>
+          <View key={`b${boardIndex}-row-${row}`} style={styles.row}>
             {guessLetters.map((letter, col) => {
               const isFocused = col === selectedIndex;
               return renderGameCell(row, col, letter, null, isFocused, true);
@@ -828,14 +952,23 @@ const GameScreen = () => {
       }
 
       boardRows.push(
-        <View key={`row-${row}`} style={styles.row}>
+        <View key={`b${boardIndex}-row-${row}`} style={styles.row}>
           {Array(WORD_LENGTH)
             .fill("")
             .map((_, col) => renderGameCell(row, col, "", null, false, false))}
         </View>,
       );
     }
-    return boardRows;
+
+    return (
+      <View style={styles.boardShell}>
+        <View style={styles.boardLabelRow}>
+          <Text style={styles.boardLabel}>{`Tabuleiro ${boardIndex + 1}`}</Text>
+          {board?.solved ? <Text style={styles.boardSolved}>✅</Text> : null}
+        </View>
+        <View style={styles.board}>{boardRows}</View>
+      </View>
+    );
   };
 
   const switchTheme = useCallback(() => {
@@ -858,49 +991,116 @@ const GameScreen = () => {
     );
   };
 
+  const boardsContainerStyle = useMemo(() => [styles.boardsWrap], [styles]);
+  const boardItemStyle = useMemo(() => ({ width: "100%" }), []);
+
   return (
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          {renderTitle()}
-          <View style={styles.tutorialRow}>
-            <View style={styles.rightHeaderGroup}>
-              <Pressable onPress={() => setShowInstructions(true)} style={({ pressed }) => [styles.pillBtn, pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] }]}>
-                <Text style={styles.pillBtnText}>Tutorial</Text>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.container}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.header}>
+            {renderTitle()}
+            <View style={styles.tutorialRow}>
+              <View style={styles.rightHeaderGroup}>
+                <Pressable
+                  onPress={() => setShowInstructions(true)}
+                  style={({ pressed }) => [
+                    styles.pillBtn,
+                    pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
+                  ]}
+                >
+                  <Text style={styles.pillBtnText}>Tutorial</Text>
+                </Pressable>
+              </View>
+
+              <View style={styles.scorePill}>
+                <Text style={styles.scorePillLabel}>Pontuação</Text>
+                <Text style={styles.scorePillValue}>{scoreReady ? playerScore : "—"}</Text>
+              </View>
+
+              <Pressable
+                onPress={switchTheme}
+                style={({ pressed }) => [
+                  styles.pillBtn,
+                  pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
+                ]}
+              >
+                <Text style={styles.pillBtnText}>{theme === "dark" ? "☀️" : "🌙"}</Text>
               </Pressable>
             </View>
+          </View>
 
-            <View style={styles.scorePill}>
-              <Text style={styles.scorePillLabel}>Pontuação</Text>
-              <Text style={styles.scorePillValue}>{scoreReady ? playerScore : "—"}</Text>
+          <View style={styles.card}>
+            <View style={styles.hintRow}>
+              <View style={styles.hintHeader}>
+                <Pressable
+                  onPress={() => setShowWordHint((prev) => !prev)}
+                  style={({ pressed }) => [
+                    styles.hintBtn,
+                    pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] },
+                  ]}
+                >
+                  <Text style={styles.hintBtnText}>
+                    {showWordHint ? "Ocultar dicas" : "Mostrar dicas"}
+                  </Text>
+                </Pressable>
+
+                <View style={styles.modePill}>
+                  <Text style={styles.modePillText}>{modeName}</Text>
+                </View>
+              </View>
+
+              {showWordHint ? (
+                <View style={{ marginTop: 6 }}>
+                  {boards.map((b, i) => (
+                    <View key={`hint-${i}`} style={styles.hintChip}>
+                      <Text style={styles.hintText}>
+                        {`#${i + 1}${b.solved ? " ✅" : ""}: ${b.hint || "Carregando..."}`}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              ) : null}
+            </View>
+
+            <View style={boardsContainerStyle}>
+              {boards.map((_, i) => (
+                <View key={`board-${i}`} style={boardItemStyle}>
+                  {renderBoard(i)}
+                </View>
+              ))}
             </View>
 
             <Pressable
-              onPress={switchTheme}
-              style={({ pressed }) => [styles.pillBtn, pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] }]}>
-              <Text style={styles.pillBtnText}>{theme === "dark" ? "☀️" : "🌙"}</Text>
+              onPress={restartCurrentStage}
+              style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.9 }]}
+            >
+              <Text style={styles.secondaryBtnText}>Reiniciar rodada</Text>
             </Pressable>
-          </View>
-        </View>
 
-        <View style={styles.card}>
-          <View style={styles.hintRow}>
-            <View style={styles.hintHeader}>
-              <Pressable onPress={() => setShowWordHint((prev) => !prev)} style={({ pressed }) => [styles.hintBtn, pressed && { opacity: 0.9, transform: [{ scale: 0.99 }] }]}>
-                <Text style={styles.hintBtnText}>{showWordHint ? "Ocultar dica" : "Mostrar dica"}</Text>
-              </Pressable>
-            </View>
+            <Pressable
+              onPress={resetGameScore}
+              style={({ pressed }) => [styles.secondaryBtnDanger, pressed && { opacity: 0.9 }]}
+            >
+              <Text style={styles.secondaryBtnText}>Zerar pontuação</Text>
+            </Pressable>
 
-            {showWordHint && (
-              <View style={styles.hintChip}>
-                <Text style={styles.hintText}>{currentWord?.hint ?? "Carregando..."}</Text>
-              </View>
-            )}
+            <Text style={styles.note}>
+              Os acentos são preenchidos automaticamente, e não são considerados nas dicas.
+            </Text>
           </View>
 
-          <View style={styles.board}>{renderGameBoard()}</View>
+          <Text style={styles.kicker}>By: @Patrikybrito_Dev</Text>
+        </ScrollView>
 
-          <WordleKeyboard t={t} styles={styles} statuses={letterStatuses} onKey={handleKeyPress} onBackspace={processBackspace} disabled={isGameOver || isAnimating.current} />
+        <View style={styles.keyboardDock}>
+          {errorFeedback ? <Text style={styles.errorMessage}>{errorFeedback}</Text> : null}
+          {feedbackMessage ? <Text style={styles.feedbackMessage}>{feedbackMessage}</Text> : null}
 
           <Pressable
             onPress={submitGuess}
@@ -909,25 +1109,28 @@ const GameScreen = () => {
               styles.primaryBtn,
               !canAttemptSubmit && { opacity: 0.5 },
               pressed && canAttemptSubmit && { transform: [{ scale: 0.99 }], opacity: 0.95 },
-            ]}>
+            ]}
+          >
             <Text style={styles.primaryBtnText}>Verificar</Text>
           </Pressable>
 
-          {errorFeedback ? <Text style={styles.errorMessage}>{errorFeedback}</Text> : null}
-
-          <Pressable onPress={startNewRound} style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.9 }]}>
-            <Text style={styles.secondaryBtnText}>Reiniciar rodada</Text>
-          </Pressable>
-
-          <Pressable onPress={resetGameScore} style={({ pressed }) => [styles.secondaryBtnDanger, pressed && { opacity: 0.9 }]}>
-            <Text style={styles.secondaryBtnText}>Zerar pontuação</Text>
-          </Pressable>
+          <WordleKeyboard
+            t={t}
+            styles={styles}
+            statuses={letterStatuses}
+            onKey={handleKeyPress}
+            onBackspace={processBackspace}
+            disabled={isGameOver || isAnimating.current}
+          />
         </View>
+      </View>
 
-        <Text style={styles.kicker}>By: @Patrikybrito_Dev</Text>
-      </ScrollView>
-
-      <Modal visible={showInstructions} transparent animationType="fade" onRequestClose={() => setShowInstructions(false)}>
+      <Modal
+        visible={showInstructions}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowInstructions(false)}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>Tutorial</Text>
@@ -935,8 +1138,13 @@ const GameScreen = () => {
             <Text style={styles.modalText}>🟢 Verde = letra correta na posição correta.</Text>
             <Text style={styles.modalText}>🟡 Amarelo = letra existe, mas em outra posição.</Text>
             <Text style={styles.modalText}>⚪ Cinza = letra não existe na palavra.</Text>
-            <Text style={styles.note}>Os acentos são preenchidos automaticamente, e não são considerados nas dicas.</Text>
-            <Pressable onPress={() => setShowInstructions(false)} style={({ pressed }) => [styles.modalCloseBtn, pressed && { opacity: 0.9 }]}>
+            <Text style={styles.note}>
+              Os acentos são preenchidos automaticamente, e não são considerados nas dicas.
+            </Text>
+            <Pressable
+              onPress={() => setShowInstructions(false)}
+              style={({ pressed }) => [styles.modalCloseBtn, pressed && { opacity: 0.9 }]}
+            >
               <Text style={styles.modalCloseText}>Fechar</Text>
             </Pressable>
           </View>
